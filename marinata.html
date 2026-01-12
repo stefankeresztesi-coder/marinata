@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marinata Étterem - Online Rendelés</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #fdfdfd; margin: 0; padding: 0; }
+        
+        /* BANNER ÉS LOGÓ ÖSSZEALAPOZVA */
+        .banner { 
+            width: 100%; height: 300px; 
+            background: url('banner.jpg') center/cover no-repeat;
+            display: flex; flex-direction: row; align-items: center; justify-content: center; 
+            text-align: center;
+            gap: 20px; /* Távolság a logó és a szöveg között */
+        }
+
+        /* A LOGÓ KARIKA STÍLUSA */
+        .banner img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%; /* Ez teszi karikává */
+            object-fit: cover;
+            border: 3px solid white; /* Egy kis keret, hogy kiemelkedjen */
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+        }
+        
+        .banner h1 { 
+            margin: 0; 
+            font-family: "Monotype Corsiva", "Apple Chancery", "ITC Zapf Chancery", "URW Chancery L", cursive;
+            font-size: 4rem; 
+            color: #000000; 
+            text-shadow: 0 0 10px #ffffff, 0 0 20px #ffffff, 0 0 30px #ffffff;
+            font-weight: normal;
+        }
+
+        /* MOBILRA OPTIMALIZÁLÁS (egymás alá kerülnek, ha nincs hely) */
+        @media (max-width: 600px) {
+            .banner { flex-direction: column; height: 350px; }
+            .banner h1 { font-size: 2.8rem; }
+            .banner img { width: 100px; height: 100px; }
+        }
+
+        .container { max-width: 1200px; margin: 20px auto; display: flex; gap: 20px; padding: 0 15px; flex-wrap: wrap; }
+        
+        .categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; flex: 3; }
+        .cat-card { background: white; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .cat-card:hover { border-color: #25D366; transform: translateY(-3px); }
+        .cat-card div { font-size: 35px; margin-bottom: 5px; }
+        .cat-card h3 { font-size: 0.85rem; margin: 0; color: #333; }
+
+        #menu-view { display: none; flex: 3; }
+        .back-btn { background: #333; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .food-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
+        .food-item { background: white; border-radius: 10px; border: 1px solid #eee; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        .add-btn { background: #ff6600; color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; font-weight: bold; }
+        .cart-box { background: white; padding: 20px; border-radius: 12px; flex: 1; min-width: 300px; border: 2px solid #25D366; height: fit-content; position: sticky; top: 10px; }
+        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .remove-btn { color: #ff0000; border: none; background: none; cursor: pointer; font-weight: bold; }
+
+        #order-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center; }
+        .order-form { background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; }
+        .order-form input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+    <div class="banner">
+        <img src="logo.jpg" alt="Marinata Logo">
+        <h1>Marinata étterem</h1>
+    </div>
+
+    <div class="container">
+        <div id="category-view" class="categories"></div>
+
+        <div id="menu-view">
+            <button class="back-btn" onclick="showCategories()">← Vissza a kategóriákhoz</button>
+            <h2 id="category-title" style="color:#2c3e50; border-left: 5px solid #ff6600; padding-left: 15px;"></h2>
+            <div id="food-list-container" class="food-list"></div>
+        </div>
+
+        <div class="cart-box">
+            <h3 style="margin-top:0">🛒 Kosár</h3>
+            <div id="cart-content">A kosarad üres.</div>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+            <div style="display: flex; justify-content: space-between; font-size: 1.2rem;">
+                <strong>Összesen:</strong>
+                <strong style="color: #25D366;"><span id="total">0</span> lei</strong>
+            </div>
+            <button class="add-btn" style="background:#25D366; width:100%; margin-top:20px;" onclick="openOrderForm()">RENDELÉS LEADÁSA</button>
+        </div>
+    </div>
+
+    <div id="order-overlay">
+        <div class="order-form">
+            <h3>Szállítási Adatok</h3>
+            <input type="text" id="cust-name" placeholder="Teljes név">
+            <input type="text" id="cust-addr" placeholder="Cím">
+            <input type="tel" id="cust-phone" placeholder="Telefonszám">
+            <button class="add-btn" style="background:#25D366; width:100%; margin-top:10px;" onclick="sendWhatsApp()">RENDELÉS WHATSAPP-ON</button>
+            <button onclick="document.getElementById('order-overlay').style.display='none'" style="width:100%; background:none; border:none; color:gray; margin-top:15px; cursor:pointer;">Mégse</button>
+        </div>
+    </div>
+
+    <script>
+        const WHATSAPP_NUMBER = "40747574899";
+
+        // Adatbázis és funkciók maradnak a régiek...
+        const categories = [
+            { id: 'reggeli', name: 'Reggeli', icon: '🍳' },
+            { id: 'starterek', name: 'Starterek', icon: '🥗' },
+            { id: 'salatak', name: 'Saláták', icon: '🥙' },
+            { id: 'levesek', name: 'Levesek/Csorbák', icon: '🍲' },
+            { id: 'talak', name: 'Meleg tálak', icon: '🍱' },
+            { id: 'csirke', name: 'Csirke ételek', icon: '🍗' },
+            { id: 'sertes', name: 'Sertés ételek', icon: '🥩' },
+            { id: 'hal', name: 'Hal ételek', icon: '🐟' },
+            { id: 'marha', name: 'Marha ételek', icon: '🍖' },
+            { id: 'burgerek', name: 'Burgerek', icon: '🍔' },
+            { id: 'tesztak', name: 'Tészták', icon: '🍝' },
+            { id: 'koretek', name: 'Köretek', icon: '🍟' },
+            { id: 'savanyusag', name: 'Savanyúságok', icon: '🥒' },
+            { id: 'pizza', name: 'Pizza', icon: '🍕' },
+            { id: 'specialitasok', name: 'Specialitások', icon: '⭐' },
+            { id: 'desszertek', name: 'Desszertek', icon: '🍰' },
+            { id: 'csomagolas', name: 'Csomagolás', icon: '📦' }
+        ];
+
+        const database = {
+            'reggeli': [{name:'Marinata omlett', price:25}, {name:'Toscana tükörtojás', price:24}],
+            'starterek': [{name:'Vegyes bruschete', price:34}, {name:'Rántott sajt', price:40}, {name:'Grillezett camembert', price:39}, {name:'Rántott camembert', price:49}],
+            'salatak': [{name:'Cézár saláta', price:36}, {name:'Tonhalas saláta', price:35}, {name:'Görög saláta', price:33}, {name:'Csirkemelles saláta', price:37}, {name:'Primavera saláta', price:37}],
+            'levesek': [{name:'Pacal csorba', price:23}, {name:'Babgulyás', price:23}, {name:'Parasztcsorba', price:23}, {name:'Gomba krémleves', price:24}, {name:'Sajtkrémleves', price:24}, {name:'Radóci leves', price:22}, {name:'Jókai bableves', price:34}],
+            'talak': [{name:'Grill tál (3 fő)', price:265}, {name:'Vegyes tál (3 fő)', price:255}],
+            'csirke': [
+                {name:'Roston sült csirkemell', price:39}, {name:'Cornflakes rántott csirke', price:45}, {name:'Feta-bacon töltött csirkemell', price:48},
+                {name:'Pikáns crispy szárnyak', price:46}, {name:'Csirke palermói szelet', price:55}, {name:'Marinata dippers csirkemell', price:58},
+                {name:'Hawaii csirkemell', price:58}, {name:'Csirke paprikás galuskával', price:55}, {name:'Cordon Bleu sajtszósszal', price:48},
+                {name:'Gombás-kapros csirkemell', price:59}, {name:'Prézliben rántott csirke', price:45}, {name:'Sonkás-mangós rántott csirke', price:48}
+            ],
+            'sertes': [{name:'Sertés Palermó-i', price:50}, {name:'Grill sertés tarja', price:61}, {name:'Cigány pecsenye', price:61}, {name:'Malac T-bone', price:75}, {name:'Wedges oldalas BBQ', price:63}, {name:'Mustáros oldalas', price:65}, {name:'Eiffel torony hús', price:67}, {name:'Malaccsülök babraguval', price:102}, {name:'Rántott sertéshús', price:45}],
+            'hal': [{name:'Roston sült lazac filé', price:63}, {name:'Roston sült pisztráng', price:44}, {name:'Kukoricalisztes pisztráng', price:46}, {name:'Szardella tál', price:58}, {name:'Lazac salsa szósszal', price:69}, {name:'Garnélarák pankó morzsában', price:60}],
+            'marha': [{name:'Pacal pörkölt galuskával', price:60}, {name:'Csípős marha tál', price:68}],
+            'burgerek': [{name:'Marha húsos burger', price:53}, {name:'Royal burger', price:55}, {name:'Pulled porc burger', price:53}, {name:'Crispy csirke burger', price:50}, {name:'Marinata burger', price:64}, {name:'Gyros tányér', price:64}, {name:'Miccs (4 db)', price:36}],
+            'tesztak': [{name:'Carbonara spagetti', price:40}, {name:'Penne arabiata', price:37}, {name:'Garnélarákos tagliatelle', price:48}, {name:'Túrós tepertős puliszka', price:39}],
+            'koretek': [{name:'Hasábburgonya', price:12}, {name:'Burgonya püré', price:11}, {name:'Wedges', price:11}, {name:'Rizotto', price:18}],
+            'savanyusag': [{name:'Káposzta saláta', price:11}, {name:'Paradicsom saláta', price:11}, {name:'Uborka saláta', price:10}, {name:'Cékla saláta', price:12}],
+            'pizza': [
+                {name:'Pizza Salami', price:27}, {name:'Margherita', price:24}, {name:'Funghi', price:25}, {name:'Prosciutto', price:26}, {name:'Capricciosa', price:29}, {name:'Diavolo', price:28}, {name:'Peperoncino', price:28}, {name:'Dallas', price:28.5}, {name:'California', price:33}, {name:'Ungarese', price:31}, {name:'Tonno', price:32}, {name:'Quattro Formaggi', price:34}, {name:'Quattro Stagioni', price:32}, {name:'Rustica', price:30}, {name:'Carnivora', price:35}, {name:'Mexicana', price:31}, {name:'Vegetariana', price:28}, {name:'Bacon Pizza', price:29}, {name:'Hawaii Pizza', price:29}, {name:'Marinata Special', price:38}, {name:'Chicken Pizza', price:31}, {name:'Prosciutto e Funghi', price:28}, {name:'Calzone (zárt)', price:30}, {name:'Gorgonzola e Noci', price:36}, {name:'Pizza Roma', price:30}, {name:'Pizza Venezia', price:31}, {name:'Pizza Milano', price:32}, {name:'Pizza Bianca', price:25}, {name:'Pizza Napoletana', price:33}, {name:'Pizza Frutti di Mare', price:39}
+            ],
+            'specialitasok': [{name:'Sertés szűzérmék vargányával', price:65}, {name:'Bélszín steak zöldbors mártással', price:110}],
+            'desszertek': [{name:'Tiramisu', price:18}, {name:'Lávasüti fagylalttal', price:22}, {name:'Papanași áfonyával', price:25}, {name:'Palacsinta', price:15}],
+            'csomagolas': [{name:'Pizzás doboz', price:2.5}, {name:'Éthordó doboz', price:2}, {name:'Műanyag szatyor', price:1}, {name:'Extra tejföl / paprika', price:3}]
+        };
+
+        let cart = [];
+
+        function init() {
+            const grid = document.getElementById('category-view');
+            categories.forEach(cat => {
+                grid.innerHTML += `<div class="cat-card" onclick="showMenu('${cat.id}', '${cat.name}')"><div>${cat.icon}</div><h3>${cat.name}</h3></div>`;
+            });
+        }
+
+        function showMenu(id, name) {
+            document.getElementById('category-view').style.display = 'none';
+            document.getElementById('menu-view').style.display = 'block';
+            document.getElementById('category-title').innerText = name;
+            const container = document.getElementById('food-list-container');
+            container.innerHTML = '';
+            (database[id] || []).forEach(item => {
+                container.innerHTML += `<div class="food-item"><strong>${item.name}</strong><span>${item.price} lei</span><button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">Kosárba</button></div>`;
+            });
+        }
+
+        function showCategories() {
+            document.getElementById('category-view').style.display = 'grid';
+            document.getElementById('menu-view').style.display = 'none';
+        }
+
+        function addToCart(name, price) { 
+            cart.push({name, price}); 
+            renderCart(); 
+        }
+
+        function removeFromCart(index) { 
+            cart.splice(index, 1); 
+            renderCart(); 
+        }
+
+        function renderCart() {
+            const content = document.getElementById('cart-content');
+            const totalSpan = document.getElementById('total');
+            if(cart.length === 0) { content.innerHTML = 'A kosarad üres.'; totalSpan.innerText = '0'; return; }
+            content.innerHTML = ''; let total = 0;
+            cart.forEach((item, i) => { 
+                total += item.price; 
+                content.innerHTML += `<div class="cart-item"><span>${item.name}</span><span>${item.price} lei <button class="remove-btn" onclick="removeFromCart(${i})">x</button></span></div>`; 
+            });
+            totalSpan.innerText = total.toFixed(1);
+        }
+
+        function openOrderForm() { 
+            if(cart.length === 0) return alert("Válassz legalább egy ételt!"); 
+            document.getElementById('order-overlay').style.display = 'flex'; 
+        }
+
+        function sendWhatsApp() {
+            const name = document.getElementById('cust-name').value;
+            const addr = document.getElementById('cust-addr').value;
+            const phone = document.getElementById('cust-phone').value;
+            if(!name || !addr || !phone) return alert("Kérjük, töltsd ki az adataidat!");
+            
+            let msg = `*RENDELÉS ÉRKEZETT*%0A------------------%0A*Név:* ${name}%0A*Cím:* ${addr}%0A*Tel:* ${phone}%0A%0A*Rendelt ételek:*%0A` + cart.map(i => `- ${i.name} (${i.price} lei)`).join('%0A') + `%0A%0A*Összesen:* ${document.getElementById('total').innerText} lei`;
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+            
+            cart = []; renderCart();
+            document.getElementById('order-overlay').style.display = 'none';
+        }
+
+        init();
+    </script>
+</body>
+</html>

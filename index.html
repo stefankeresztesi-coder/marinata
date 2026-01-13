@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marinata Étterem - Online Rendelés</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #fdfdfd; margin: 0; padding: 0; color: #333; }
+        .banner { width: 100%; height: 500px; background: url('banner.jpg') center 20%/cover no-repeat; background-color: #000; }
+        .container { max-width: 1200px; margin: 20px auto; display: flex; gap: 20px; padding: 0 15px; flex-wrap: wrap; }
+        
+        .categories { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; flex: 3; }
+        .cat-card { background: white; padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #ddd; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .cat-card:hover { border-color: #25D366; transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .cat-card div { font-size: 2.2rem; margin-bottom: 8px; }
+        .cat-card h3 { margin: 0; font-size: 0.85rem; color: #333; text-transform: uppercase; }
+
+        #menu-view { display: none; flex: 3; }
+        .food-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
+        .food-item { background: white; border-radius: 10px; border: 1px solid #eee; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+        .food-item strong { display: block; margin-bottom: 5px; font-size: 1.05rem; }
+        .food-item span { color: #25D366; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem; }
+        
+        .add-btn { background: #ff6600; color: white; border: none; padding: 10px; border-radius: 20px; cursor: pointer !important; font-weight: bold; }
+        .back-btn { cursor: pointer !important; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ccc; background: #eee; width: 100%; font-weight: bold; font-size: 1rem; }
+        
+        .sidebar { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px; }
+        .cart-box, .info-card { background: white; padding: 20px; border-radius: 12px; border: 2px solid #25D366; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .cart-box h3, .info-card h3 { margin-top: 0; color: #333; font-size: 1.1rem; border-bottom: 2px solid #25D366; padding-bottom: 10px; text-transform: uppercase; }
+
+        .opening-list { list-style: none; padding: 0; margin: 0; font-size: 0.95rem; }
+        .opening-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .phone-link { color: #25D366; text-decoration: none; font-weight: bold; font-size: 1.1rem; cursor: pointer !important; }
+
+        #cart-content { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; max-height: 250px; overflow-y: auto; }
+        .remove-btn { color: #ff4444; border: none; background: none; font-weight: bold; cursor: pointer !important; font-size: 1.1rem; }
+        .min-order-msg { color: #ff4444; font-size: 0.85rem; margin-bottom: 10px; display: none; text-align: center; font-weight: bold; }
+
+        #order-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; }
+        .order-form { background: white; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; }
+        .order-form input, .order-form textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 1rem; }
+
+        footer { text-align: center; padding: 30px; color: #999; font-size: 0.8rem; border-top: 1px solid #eee; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div class="banner"></div>
+
+    <div class="container">
+        <div id="category-view" class="categories"></div>
+
+        <div id="menu-view">
+            <button class="back-btn" onclick="showCategories()">← VISSZA A KATEGÓRIÁKHOZ</button>
+            <h2 id="category-title"></h2>
+            <div id="food-list-container" class="food-list"></div>
+        </div>
+
+        <div class="sidebar">
+            <div class="cart-box">
+                <h3>🛒 Kosár</h3>
+                <div id="cart-content">A kosarad üres.</div>
+                <div id="summary-details" style="font-size: 0.9rem; color: #555; margin-bottom: 10px;"></div>
+                <p style="font-size: 1.2rem; margin-bottom: 5px;">Összesen: <strong id="total">0</strong> lei</p>
+                <div id="min-order-warning" class="min-order-msg">A minimális rendelés 30 lei!</div>
+                <button id="checkout-btn" class="add-btn" style="width:100%; font-size: 1rem; padding: 12px;" onclick="handleCheckoutClick()" disabled>RENDELÉS LEADÁSA</button>
+            </div>
+
+            <div class="info-card">
+                <h3>📍 Kapcsolat</h3>
+                <p><strong>Cím:</strong> Corvinilor utca 28 szám</p>
+                <p><strong>Hívás most:</strong><br>
+                   <a href="tel:+40757462161" class="phone-link">📞 0757 462 161</a>
+                </p>
+                <h3 style="margin-top:20px">🕒 Nyitvatartás</h3>
+                <ul class="opening-list">
+                    <li><span>Hétköznap:</span> <strong>10:00 - 22:30</strong></li>
+                    <li><span>Szombat:</span> <strong>10:00 - 23:30</strong></li>
+                    <li><span>Vasárnap:</span> <strong>11:00 - 22:30</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="order-overlay">
+        <div class="order-form">
+            <h3 style="margin-top:0">Szállítási adatok</h3>
+            <input type="text" id="cust-name" placeholder="Teljes név">
+            <input type="text" id="cust-addr" placeholder="Cím (utca, házszám, emelet)">
+            <input type="tel" id="cust-phone" placeholder="Telefonszám">
+            <textarea id="cust-note" rows="2" placeholder="Megjegyzés"></textarea>
+            <div style="background: #f9f9f9; padding: 12px; border-radius: 8px; margin: 10px 0; border: 1px solid #eee;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer !important; font-size: 0.9rem;">
+                    <input type="checkbox" id="call-request" style="cursor: pointer !important; width: 18px; height: 18px;"> Kérek telefonos visszaigazolást
+                </label>
+            </div>
+            <button class="add-btn" style="background:#25D366; width:100%; padding: 14px;" onclick="sendWhatsApp()">Küldés WhatsApp-on</button>
+            <button class="back-btn" style="margin-top:10px; border:none;" onclick="document.getElementById('order-overlay').style.display='none'">Mégse</button>
+        </div>
+    </div>
+
+    <footer>&copy; 2024 Marinata Étterem - Satu Mare</footer>
+
+    <script>
+        const WHATSAPP_NUMBER = "40747574899";
+        const MIN_ORDER_VALUE = 30;
+        const PACKAGING_FEE = 4.5;
+        
+        // Items here will have 0 packaging fee
+        const NO_PACKAGING_ITEMS = [
+            'Fehér szósz', 'Pikáns fehér szósz', 'Piros szósz', 'Pikáns piros szósz', 'Extra csípős paprika', 'Extra tejföl',
+            'Ice coffe (200 ml)', 'Espresso (30 ml)', 'Capuccino espresso (100 ml)', 'Latte machiato (200 ml)', 
+            'Sötét / fehér forró csoki (150 ml)', 'Gyógynövény / gyümölcs tea (250 ml)',
+            'Coca Cola (Cola / Fanta) (250 ml)', 'Schweppes (250 ml)', 'Cappy (több ízben) (250 ml)', 'Fuze tea (250 ml)',
+            'Dorna ásványvíz (330 ml)', 'Dorna szénsavmentes víz (330 ml)', 'Ásványvíz (750 ml)', 'Szénsavmentes víz (750 ml)',
+            'Klasszikus limonádé (400 ml)', 'Klasszikus limonádé (1000 ml)', 'Vegyes limonádé (400 ml)', 'Vegyes limonádé (1000 ml)',
+            'Aromás limonádé (400 ml)', 'Aromás limonádé (1000 ml)', 'Fresh (narancs, grapefruit, mixt) (250 ml)',
+            'Ursus (500 ml)', 'Ursus (330 ml)', 'Ursus Black (330 ml)', 'Ursus Retro (500 ml)', 'Alkoholmentes Ursus (500 ml)',
+            'Peroni (500 ml)', 'Peroni (330 ml)', 'Alkoholmentes Peroni (330 ml)', 'Peroni Stile Capri (330 ml)', 
+            'Timișoreana (500 ml)', 'Kozel lager (330 ml)', 'Kozel dark (330 ml)', 'Corona (355 ml)', 'Pilsner Urquell (330 ml)',
+            'Azuga szűretlen (500 ml)', 'Ursus korsó sör (400 ml)', 'Ursus kis korsó sör (300 ml)', 
+            'Peroni korsó sör (400 ml)', 'Peroni kis korsó sör (300 ml)',
+            'Burn (250 ml)', 'Red Bull (250 ml)',
+            'Jim Beam (50 ml)', 'Jack Daniels (50 ml)', 'Házi szilvapálinka (50 ml)', 'Stalinskaya (50 ml)', 'Finlandia (50 ml)',
+            'Absolut (50 ml)', 'Absolut Citrom (50 ml)', 'Tequila (50 ml)', 'Martini Bianco (50 ml)', 'Martini Rosso (50 ml)',
+            'Baileys (50 ml)', 'Jidvei (50 ml)', 'Alexandrion (50 ml)', 'Gin Tonic (250 ml)', 'Jägermeister (50 ml)', 'Unicum (50 ml)',
+            'Sauvignon Blanc demisec (750 ml)', 'Traminer demidulce (750 ml)', 'Riesling Italian sec (750 ml)', 
+            'Rose demidulce (750 ml)', 'Cabernet Sauvignon sec (750 ml)', 'Merlot demisec (750 ml)',
+            'Vinul Casei / Kancsós bor (500 ml)', 'Vin la pahar / Bor pohárban (200 ml)'
+        ];
+
+        const database = {
+            'reggeli': [{name:'Marinata omlett (250g)', price:25},{name:'Toscana tükörtojás (250g)', price:24}],
+            'starterek': [{name:'Vegyes bruschete (120g)', price:34},{name:'Rántott sajt fehér szósszal (200g)', price:40},{name:'Grillezzett camembert (200g)', price:39},{name:'Rántott camembert burgonyával (230g)', price:49}],
+            'salatak': [{name:'Cézár saláta (400g)', price:36},{name:'Tonhalas saláta (360g)', price:35},{name:'Görög saláta (400g)', price:33},{name:'Csirkemelles saláta (400g)', price:37},{name:'Primavera saláta (400g)', price:37}],
+            'levesek': [{name:'Pacal csorba (400ml)', price:23},{name:'Babgulyás (400ml)', price:23},{name:'Parasztcsorba marhahússal (400ml)', price:23},{name:'Gomba krémleves (400ml)', price:24},{name:'Sajtkrémleves (400ml)', price:24},{name:'Radóci leves (400ml)', price:22},{name:'Jókai bableves (400ml)', price:34},{name:'Extra csípős paprika', price:5},{name:'Extra tejföl', price:5}],
+            'talak': [{name:'Grill tál (1.2kg)', price:265},{name:'Vegyes tál (0.8kg)', price:255}],
+            'csirke': [{name:'Roston sült csirkemell (180g)', price:39},{name:'Cornflakes rántott csirke (180g)', price:45},{name:'Feta-bacon töltött csirkemell (200g)', price:48},{name:'Pikáns crispy szárnyak (250g)', price:46},{name:'Csirke palermói szelet (200g)', price:55},{name:'Marinata dippers csirke (230g)', price:58},{name:'Hawaii csirkemell (250g)', price:58},{name:'Csirke paprikás (400g)', price:55},{name:'Cordon Bleu csirkemellből (450g)', price:48},{name:'Csirkemell gombás mártásban (400g)', price:59},{name:'Prézliben rántott csirke (180g)', price:45},{name:'Rántott sonkás-mangós csirke (200g)', price:48}],
+            'sertes': [{name:'Sertés Palermó-i (200g)', price:50},{name:'Grillen készített tarja (200g)', price:61},{name:'Cigány pecsenye (220g)', price:61},{name:'Csontos-bőrös malac T-bone (250g)', price:75},{name:'Sertés oldalas BBQ (400g)', price:63},{name:'Mézes-mustáros oldalas (400g)', price:65},{name:'Eiffel torony (450g)', price:67},{name:'Roppanós malaccsülök (850g)', price:102},{name:'Prézliben rántott sertéshús (180g)', price:45}],
+            'hal': [{name:'Roston sült lazac filé (200g)', price:63},{name:'Roston sült pisztráng (230g)', price:44},{name:'Kukoricalisztes pisztráng (230g)', price:46},{name:'Szardella tál (500g)', price:58},{name:'Lazac salsa szósszal (400g)', price:69},{name:'Garnélarák pankó morzsában (400g)', price:60}],
+            'marha': [{name:'Pacal pörkölt galuskával (400g)', price:60},{name:'Csípős tál (220g)', price:68}],
+            'burger': [{name:'Marha húsos burger (450g)', price:53},{name:'Royal burger (450g)', price:55},{name:'Pulled porc burger (450g)', price:53},{name:'Crispy csirke burger (450g)', price:50},{name:'Marinata burger (450g)', price:64},{name:'Gyros tál/pitában (450g)', price:64},{name:'Miccs sült burgonyával (4db)', price:36},{name:'Dippers burgonya szamurájjal (230g)', price:26}],
+            'meleg_szosz': [{name:'Hiribi gomba szósz (80g)', price:12},{name:'Champignon gomba szósz (80g)', price:11},{name:'Gorgonzola szósz (80g)', price:14},{name:'Édes savanyú szósz (80g)', price:12},{name:'Fokhagyma szósz (80g)', price:11}],
+            'teszta': [{name:'Carbonara spagetti (400g)', price:40},{name:'Penne arabiata (400g)', price:37},{name:'Tagliatelle funghi porcini (400g)', price:40},{name:'Csőben sült penne (400g)', price:39},{name:'Csőben sült bolognese (400g)', price:43},{name:'Garnélarákos cukkinis tészta (420g)', price:48},{name:'Garnélarákos tagliatelle (420g)', price:48},{name:'Milánói penne (400g)', price:38},{name:'Quatro formaggi penne (400g)', price:43},{name:'Carbonara penne (400g)', price:42},{name:'Gnocchi carbonara al forno (400g)', price:44},{name:'Gnocchi quattro formaggi (400g)', price:45},{name:'Túrós tepertős puliszka (230g)', price:39},{name:'Erdélyi puliszka (250g)', price:42}],
+            'koretek': [{name:'Hasábburgonya (200g)', price:12},{name:'Burgonya püré (200g)', price:11},{name:'Wedges burgonya (200g)', price:11},{name:'Arany burgonya (200g)', price:12},{name:'Natúr burgonya (200g)', price:11},{name:'Rizses zöldség (200g)', price:10},{name:'Házi galuska (200g)', price:11},{name:'Puliszka (200g)', price:12},{name:'Rizotto (200g)', price:18}],
+            'savanyusag': [{name:'Káposzta saláta (150g)', price:11},{name:'Paradicsom saláta (150g)', price:11},{name:'Paradicsom saláta telemeával (150g)', price:11},{name:'Lilahagyma saláta (150g)', price:11},{name:'Friss uborka saláta (150g)', price:10},{name:'Friss vegyes saláta (150g)', price:12},{name:'Vegyes savanyúság (150g)', price:12},{name:'Cékla saláta (150g)', price:12}],
+            'pizza': [{name:'Pizza Salami (500g)', price:27},{name:'Margherita (500g)', price:24},{name:'Funghi (550g)', price:25},{name:'Prosciutto (550g)', price:26},{name:'Capricciosa (600g)', price:29},{name:'Diavolo (600g)', price:28},{name:'Peperoncino (300g)', price:28},{name:'Dallas (600g)', price:28.5},{name:'California (650g)', price:33},{name:'Ungarese (600g)', price:31},{name:'Tonno (600g)', price:32},{name:'Parmegiano (600g)', price:37},{name:'Americana (650g)', price:33},{name:'Mexicana (600g)', price:31},{name:'Carbonara (600g)', price:31},{name:'Giovanni (600g)', price:33},{name:'Messina (600g)', price:33},{name:'Sevilla (650g)', price:42},{name:'Mozzarelleg (600g)', price:34},{name:'Milano (600g)', price:34},{name:'Cheddar (600g)', price:35},{name:'Quattro stagioni (650g)', price:35},{name:'Quattro carni (650g)', price:38},{name:'Quattro formaggi (600g)', price:37},{name:'Pollo (600g)', price:36},{name:'Palermo (600g)', price:32},{name:'Marinata (600g)', price:36},{name:'Hawai (600g)', price:30.5},{name:'Florenza (600g)', price:35},{name:'Vegetarian (600g)', price:31}],
+            'specialis': [{name:'Calzone (600g)', price:34},{name:'Focaccia (400g)', price:22}],
+            'desszert': [{name:'Csoki szuflé (250g)', price:31},{name:'Finettis banános palacsinta (180g)', price:28},{name:'Túrós palacsinta (200g)', price:34},{name:'Áfanyás lekváros palacsinta (160g)', price:25},{name:'Papanasi áfonyával (200g)', price:45},{name:'Papanasi áfonyával (100g)', price:22.5}],
+            'kave_tea': [{name:'Ice coffe (200 ml)', price:15},{name:'Espresso (30 ml)', price:10},{name:'Capuccino espresso (100 ml)', price:11},{name:'Latte machiato (200 ml)', price:15},{name:'Sötét / fehér forró csoki (150 ml)', price:14},{name:'Gyógynövény / gyümölcs tea (250 ml)', price:10}],
+            'udito': [{name:'Coca Cola (Cola / Fanta) (250 ml)', price:9.5},{name:'Schweppes (250 ml)', price:9.5},{name:'Cappy (250 ml)', price:10},{name:'Fuze tea (250 ml)', price:10},{name:'Dorna ásványvíz (330 ml)', price:7},{name:'Dorna szénsavmentes víz (330 ml)', price:7},{name:'Ásványvíz (750 ml)', price:14},{name:'Szénsavmentes víz (750 ml)', price:14},{name:'Klasszikus limonádé (400 ml)', price:13},{name:'Klasszikus limonádé (1000 ml)', price:23},{name:'Fresh (250 ml)', price:16}],
+            'sorok': [{name:'Ursus (500 ml)', price:10}, {name:'Ursus (330 ml)', price:8.5},{name:'Ursus Black (330 ml)', price:9}, {name:'Peroni (500 ml)', price:11},{name:'Peroni (330 ml)', price:10}, {name:'Kozel lager (330 ml)', price:8.5},{name:'Corona (355 ml)', price:14}],
+            'energia': [{name:'Burn (250 ml)', price:12},{name:'Red Bull (250 ml)', price:14}],
+            'roviditalok': [{name:'Jim Beam (50 ml)', price:13},{name:'Jack Daniels (50 ml)', price:14},{name:'Házi szilvapálinka (50 ml)', price:12},{name:'Finlandia (50 ml)', price:12},{name:'Jägermeister (50 ml)', price:12},{name:'Unicum (50 ml)', price:12},{name:'Gin Tonic (250 ml)', price:25}],
+            'borok': [
+                {name:'Sauvignon Blanc demisec (750 ml)', price:50},
+                {name:'Traminer demidulce (750 ml)', price:50},
+                {name:'Riesling Italian sec (750 ml)', price:45},
+                {name:'Rose demidulce (750 ml)', price:45},
+                {name:'Cabernet Sauvignon sec (750 ml)', price:60},
+                {name:'Merlot demisec (750 ml)', price:43},
+                {name:'Vinul Casei / Kancsós bor (500 ml)', price:17},
+                {name:'Vin la pahar / Bor pohárban (200 ml)', price:14}
+            ],
+            'szoszok_csomag': [{name:'Fehér szósz', price:4.5},{name:'Pikáns fehér szósz', price:5},{name:'Piros szósz', price:4.5},{name:'Pikáns piros szósz', price:5}]
+        };
+
+        const categories = [
+            { id: 'reggeli', name: 'Reggeli', icon: '🍳' },
+            { id: 'starterek', name: 'Starterek', icon: '🥗' },
+            { id: 'salatak', name: 'Saláták', icon: '🍃' },
+            { id: 'levesek', name: 'Levesek / Csorbák', icon: '🍲' },
+            { id: 'talak', name: '3 személyes tálak', icon: '🍽️' },
+            { id: 'csirke', name: 'Csirke ételek', icon: '🍗' },
+            { id: 'sertes', name: 'Sertés ételek', icon: '🥩' },
+            { id: 'hal', name: 'Hal ételek', icon: '🐟' },
+            { id: 'marha', name: 'Marha ételek', icon: '🍖' },
+            { id: 'burger', name: 'Burgerek & Mixek', icon: '🍔' },
+            { id: 'meleg_szosz', name: 'Meleg szószok', icon: '🍯' },
+            { id: 'teszta', name: 'Tészták & Puliszkák', icon: '🍝' },
+            { id: 'koretek', name: 'Köretek', icon: '🍟' },
+            { id: 'savanyusag', name: 'Saláták / Savanyúk', icon: '🥒' },
+            { id: 'pizza', name: 'Pizza', icon: '🍕' },
+            { id: 'specialis', name: 'Specialitások', icon: '🌟' },
+            { id: 'desszert', name: 'Desszertek', icon: '🍰' },
+            { id: 'kave_tea', name: 'Kávé, Tea, Csoki', icon: '☕' },
+            { id: 'udito', name: 'Üdítő, Fresh, Limonádé', icon: '🥤' },
+            { id: 'sorok', name: 'Sörök', icon: '🍺' },
+            { id: 'energia', name: 'Energia italok', icon: '⚡' },
+            { id: 'roviditalok', name: 'Röviditalok', icon: '🥃' },
+            { id: 'borok', name: 'Domeniile Șereș Borok', icon: '🍷' },
+            { id: 'szoszok_csomag', name: 'Szószok', icon: '🥡' }
+        ];
+
+        let cart = [];
+
+        function init() {
+            const grid = document.getElementById('category-view');
+            grid.innerHTML = categories.map(cat => `<div class="cat-card" onclick="showMenu('${cat.id}', '${cat.name}')"><div>${cat.icon}</div><h3>${cat.name}</h3></div>`).join('');
+        }
+
+        function showMenu(id, name) {
+            document.getElementById('category-view').style.display = 'none';
+            document.getElementById('menu-view').style.display = 'block';
+            document.getElementById('category-title').innerText = name;
+            const container = document.getElementById('food-list-container');
+            container.innerHTML = (database[id] || []).map(item => `<div class="food-item"><strong>${item.name}</strong><span>${item.price} lei</span><button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">Kosárba</button></div>`).join('');
+            window.scrollTo(0,0);
+        }
+
+        function showCategories() {
+            document.getElementById('category-view').style.display = 'grid';
+            document.getElementById('menu-view').style.display = 'none';
+        }
+
+        function addToCart(name, price) {
+            const isNoPkg = NO_PACKAGING_ITEMS.includes(name);
+            cart.push({ name, price, pkg: isNoPkg ? 0 : PACKAGING_FEE });
+            renderCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+        }
+
+        function renderCart() {
+            const content = document.getElementById('cart-content');
+            const totalSpan = document.getElementById('total');
+            const summaryDiv = document.getElementById('summary-details');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const warning = document.getElementById('min-order-warning');
+
+            if(cart.length === 0) {
+                content.innerHTML = 'A kosarad üres.';
+                totalSpan.innerText = '0';
+                summaryDiv.innerHTML = '';
+                checkoutBtn.disabled = true;
+                warning.style.display = "none";
+                return;
+            }
+
+            content.innerHTML = cart.map((item, index) => `<div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.9rem; align-items:center;"><span>${item.name}</span><span>${item.price} lei <button class="remove-btn" onclick="removeFromCart(${index})">✕</button></span></div>`).join('');
+
+            const foodTotal = cart.reduce((sum, item) => sum + item.price, 0);
+            const pkgTotal = cart.reduce((sum, item) => sum + item.pkg, 0);
+            const finalTotal = foodTotal + pkgTotal;
+
+            summaryDiv.innerHTML = `Termékek: ${foodTotal.toFixed(1)} lei<br>Csomagolás: ${pkgTotal.toFixed(1)} lei`;
+            totalSpan.innerText = finalTotal.toFixed(1);
+
+            if(finalTotal < MIN_ORDER_VALUE) {
+                checkoutBtn.disabled = true;
+                warning.style.display = "block";
+            } else {
+                checkoutBtn.disabled = false;
+                checkoutBtn.style.background = "#25D366";
+                warning.style.display = "none";
+            }
+        }
+
+        function handleCheckoutClick() {
+            document.getElementById('order-overlay').style.display = 'flex';
+        }
+
+        function sendWhatsApp() {
+            const name = document.getElementById('cust-name').value;
+            const addr = document.getElementById('cust-addr').value;
+            const phone = document.getElementById('cust-phone').value;
+            const note = document.getElementById('cust-note').value;
+            const call = document.getElementById('call-request').checked;
+
+            if(!name || !addr || !phone) { alert("Név, cím és telefon kötelező!"); return; }
+
+            const total = document.getElementById('total').innerText;
+            let msg = `*ÚJ RENDELÉS - MARINATA*\n👤 Név: ${name}\n📍 Cím: ${addr}\n📞 Tel: ${phone}\n☎️ Visszahívás: ${call ? "IGEN" : "NEM"}\n`;
+            if(note) msg += `📝 Megj: ${note}\n`;
+            msg += `\n*Tételek:*\n` + cart.map(i => `- ${i.name}`).join('\n');
+            msg += `\n\n💰 *Összesen: ${total} lei*`;
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
+        }
+
+        init();
+    </script>
+</body>
+</html>

@@ -236,12 +236,58 @@
         { name: { hu: 'Calzone 600 Gr-1850 kal.', ro: 'Calzone 600 Gr-1850 kal.' }, price: 34, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, sonka, kolbász, <span style="color:red;">burduf túró</span>, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, șuncă, cârnați afumat, <span style="color:red;">burduf</span>, oregano' } },
         { name: { hu: 'Focaccia 400 Gr-1550 kal.', ro: 'Focaccia 400 Gr-1550 kal.' }, price: 22, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, fokhagyma, fűszerek, oliva olaj', ro: '<span style="color:red;">Blat (făină)</span>, usturoi, condimente, ulei de măsline' } }
     ],
-    'szoszok': [
-        { name: { hu: 'Fehér szósz-211 kal.', ro: 'Sos alb-211 kal.' }, price: 4.5, ing: { hu: '<span style="color:red;">Joghurt, mustár, tojás</span>, fokhagyma', ro: '<span style="color:red;">Iaurt, muștar, ou</span>, usturoi' } },
-        { name: { hu: 'Pikáns fehér szósz-211 kal.', ro: 'Sos alb picant-211 kal.' }, price: 5, ing: { hu: '<span style="color:red;">Joghurt, mustár, tojás</span>, fokhagyma, chilly', ro: '<span style="color:red;">Iaurt, muștar, ou</span>, usturoi, chilly' } },
-        { name: { hu: 'Piros szósz-24 kal.', ro: 'Sos roșu-24 kal.' }, price: 4.5 },
-        { name: { hu: 'Pikáns piros szósz-24 kal.', ro: 'Sos roșu picant-24 kal.' }, price: 5 }
-    ],
+    'meleg_szosz': [
+    { 
+        name: { hu: 'Fehér szósz - 211 kal.', ro: 'Sos alb - 211 kal.' }, 
+        price: 4.5, 
+        ing: { hu: 'Joghurt, mustár, tojás, fokhagyma, olaj', ro: 'Iaurt, muștar, ou, usturoi, ulei' } 
+    },
+    { 
+        name: { hu: 'Pikáns fehér szósz - 211 kal.', ro: 'Sos alb picant - 211 kal.' }, 
+        price: 5, 
+        ing: { hu: 'Joghurt, mustár, tojás, fokhagyma, olaj, chilly', ro: 'Iaurt, muștar, ou, usturoi, ulei ardei iute' } 
+    },
+    { 
+        name: { hu: 'Piros szósz - 24 kal.', ro: 'Sos roșu - 24 kal.' }, 
+        price: 4.5, 
+        ing: { hu: 'Paradicsom szósz, fűszerek, cukor', ro: 'Sos de roșii, condimente, zahăr' } 
+    },
+    { 
+        name: { hu: 'Pikáns piros szósz - 24 kal.', ro: 'Sos roșu picant - 24 kal.' }, 
+        price: 5, 
+        ing: { hu: 'Paradicsom szósz, fűszerek, cukor, chilly', ro: 'Sos de roșii, condimente, zahăr, ardei iute' } 
+    },
+    { 
+        name: { hu: 'Hiriba gomba szósz - 80 Gr - 105 kal.', ro: 'Sos de hribe - 80 Gr - 105 kal.' }, 
+        price: 15, 
+        ing: { hu: 'Tejszín, hiriba gomba, fűszerek', ro: 'Smăntînă dulce, hribe, condimente' } 
+    },
+    { 
+        name: { hu: 'Champignon gomba szósz - 80 Gr - 96 kal.', ro: 'Sos de ciuperci champignon - 80 Gr - 96 kal.' }, 
+        price: 11, 
+        ing: { hu: 'Tejszín, champignon gomba, fűszerek', ro: 'Smăntână dulce, ciuperci champignon, condimente' } 
+    },
+    { 
+        name: { hu: 'Gorgonzola szósz - 80 Gr - 250 kal.', ro: 'Sos de gorgonzola - 80 Gr - 250 kal.' }, 
+        price: 14, 
+        ing: { hu: 'Tejszín, gorgonzola, fűszerek', ro: 'Smăntînă dulce, gorgonzola, condimente' } 
+    },
+    { 
+        name: { hu: 'Édes savanyú szósz - 80 Gr - 27 kal.', ro: 'Sos dulce acrișor - 80 Gr - 27 kal.' }, 
+        price: 12, 
+        ing: { hu: 'Ketchup, szója szósz, cukor, ecet', ro: 'Ketchup, sos soia, zahăr, oțet' } 
+    },
+    { 
+        name: { hu: 'Fokhagyma szósz - 80 Gr - 38 kal.', ro: 'Mujdei usturoi - 80 Gr - 38 kal.' }, 
+        price: 11, 
+        ing: { hu: 'Fokhagyma, olaj', ro: 'Usturoi, ulei' } 
+    },
+    { 
+        name: { hu: 'Csomagolás', ro: 'Ambalaj' }, 
+        price: 4.5, 
+        ing: { hu: '', ro: '' } 
+    }
+],
      'csomagolas': [
         { 
             name: { hu: 'Csomagolás', ro: 'Ambalaj' }, 
@@ -332,13 +378,13 @@ const categories = [
     { id: 'starterek', hu: 'Starterek', ro: 'Startere', icon: '🥗' },
     { id: 'salatak', hu: 'Saláták', ro: 'Salate', icon: '🥬' },
     { id: 'levesek', hu: 'Levesek / Csorbák', ro: 'Supe / Ciorbe', icon: '🍜' },
-    { id: 'harom_szemelyes_talak', hu: '3 személyes tálak', ro: 'Platouri 3 pers', icon: '🍱' },
+    { id: 'harom_szemelyes_talak', hu: 'Három személyes meleg tálak', ro: 'Platouri calde trei persoane', icon: '🍱' },
     { id: 'csirke', hu: 'Csirke ételek', ro: 'Preparate din pasăre', icon: '🍗' },
     { id: 'sertes', hu: 'Sertés ételek', ro: 'Preparate din porc', icon: '🥩' },
     { id: 'hal', hu: 'Halételek', ro: 'Preparate din pește', icon: '🐟' },
     { id: 'marha', hu: 'Marha ételek', ro: 'Preparate din vită', icon: '🐂' },
     { id: 'burger', hu: 'Burgerek & Mixek', ro: 'Burger & Mix', icon: '🍔' },
-    { id: 'meleg_szosz', hu: 'Meleg szószok', ro: 'Sosuri calde', icon: '🍯' },
+    { id: 'meleg_szosz', hu: 'Pizza / Meleg szószok', ro: 'Pizza / Sosuri calde', icon: '🍯' },
     { id: 'tesztak', hu: 'Tészták & Puliszkák', ro: 'Paste & Mămăligă', icon: '🍝' },
     { id: 'koretek', hu: 'Garnitúrák / Köretek', ro: 'Garnituri', icon: '🍟' },
     { id: 'savanyusag', hu: 'Saláták / Savanyúk', ro: 'Salată și murături', icon: '🥒' },

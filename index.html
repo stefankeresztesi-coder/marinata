@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marinata Étterem - Online Rendelés</title>
+    <title>Marinata Étterem - Étlap</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #fdfdfd; margin: 0; padding: 0; color: #333; padding-bottom: 70px; } /* padding-bottom a lebegő sáv miatt */
+        body { font-family: 'Segoe UI', sans-serif; background: #fdfdfd; margin: 0; padding: 0; color: #333; }
         .banner-wrapper { position: relative; width: 100%; max-width: 1200px; margin: 0 auto; }
         .banner { width: 100%; height: 350px; background: url('banner.jpg') center center/contain no-repeat; background-color: #FFFFFF; }
         .lang-container { position: absolute; bottom: 20px; right: 20px; display: flex; gap: 12px; z-index: 1000; }
@@ -19,59 +19,19 @@
         .cat-card div { font-size: 2.2rem; margin-bottom: 8px; }
         .cat-card h3 { margin: 0; font-size: 0.85rem; color: #333; text-transform: uppercase; }
         #menu-view { display: none; flex: 3; }
-        .food-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; }
-        .food-item { background: white; border-radius: 10px; border: 1px solid #eee; padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
-        .food-item strong { display: block; margin-bottom: 5px; font-size: 1.05rem; }
-        .food-item span { color: #25D366; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem; }
-        .add-btn { background: #ff6600; color: white; border: none; padding: 10px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .add-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .food-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
+        .food-item { background: white; border-radius: 10px; border: 1px solid #eee; padding: 15px; text-align: left; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+        .food-item strong { display: block; margin-bottom: 5px; font-size: 1.1rem; color: #000; }
+        .food-price { color: #25D366; font-weight: bold; font-size: 1.1rem; margin-bottom: 8px; display: block; }
+        .ingredients { font-size: 0.85rem; color: #666; line-height: 1.4; border-top: 1px dashed #eee; padding-top: 10px; margin-top: auto; }
         .back-btn { cursor: pointer; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #ccc; background: #eee; width: 100%; font-weight: bold; font-size: 1rem; }
         .sidebar { flex: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px; }
-        .cart-box, .info-card { background: white; padding: 20px; border-radius: 12px; border: 2px solid #25D366; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .cart-box h3, .info-card h3 { margin-top: 0; color: #333; font-size: 1.1rem; border-bottom: 2px solid #25D366; padding-bottom: 10px; text-transform: uppercase; }
+        .info-card { background: white; padding: 20px; border-radius: 12px; border: 2px solid #25D366; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .info-card h3 { margin-top: 0; color: #333; font-size: 1.1rem; border-bottom: 2px solid #25D366; padding-bottom: 10px; text-transform: uppercase; }
         .phone-link { color: #25D366; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
         .opening-list { list-style: none; padding: 0; margin: 0; font-size: 0.95rem; }
         .opening-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        #cart-content { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; max-height: 250px; overflow-y: auto; }
-        .remove-btn { color: #ff4444; border: none; background: none; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-        .min-order-msg { color: #ff4444; font-size: 0.85rem; margin-bottom: 10px; display: none; text-align: center; font-weight: bold; }
-        #order-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; justify-content:center; align-items:center; }
-        .order-form { background: white; padding: 25px; border-radius: 15px; width: 95%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
-        .order-form .input-group { position: relative; margin: 6px 0; }
-        .order-form input, .order-form textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 1rem; }
-        .required-star { position: absolute; right: 10px; top: 12px; color: #ff4444; font-weight: bold; pointer-events: none; }
-        .checkbox-row { display: flex; align-items: flex-start; gap: 10px; margin: 12px 0 5px 0; font-size: 0.88rem; cursor: pointer; text-align: left; }
-        .checkbox-row input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; }
-        .terms-details { font-size: 0.75rem; color: #666; background: #f9f9f9; padding: 10px; border-radius: 5px; border: 1px solid #eee; margin-bottom: 12px; line-height: 1.4; }
         footer { text-align: center; padding: 30px; color: #999; font-size: 0.8rem; border-top: 1px solid #eee; margin-top: 30px; }
-        .address-text-line { display: block; }
-
-        /* ÚJ: Lebegő kosár stílusa mobilon */
-        #mobile-cart-bar {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #25D366;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            z-index: 1500;
-            justify-content: space-around;
-            align-items: center;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-            cursor: pointer;
-        }
-        /* ÚJ: Admin panel stílusa */
-        .admin-box {
-            background: #eee;
-            padding: 10px;
-            text-align: center;
-            font-size: 0.8rem;
-            border-top: 1px solid #ccc;
-        }
     </style>
 </head>
 <body>
@@ -84,11 +44,6 @@
         </div>
     </div>
 
-    <div id="mobile-cart-bar" onclick="handleCheckoutClick()">
-        <span>🛒 <span id="mobile-total">0</span> lei</span>
-        <span id="mobile-order-text">RENDELÉS LEADÁSA</span>
-    </div>
-
     <div class="container">
         <div id="category-view" class="categories"></div>
         <div id="menu-view">
@@ -98,20 +53,11 @@
         </div>
 
         <div class="sidebar">
-            <div class="cart-box">
-                <h3 id="cart-title-text">🛒 Kosár</h3>
-                <div id="cart-content">A kosarad üres.</div>
-                <div id="summary-details" style="font-size: 0.9rem; color: #555; margin-bottom: 10px;"></div>
-                <p style="font-size: 1.2rem; margin-bottom: 5px;"><span id="total-text">Összesen</span>: <strong id="total">0</strong> lei</p>
-                <div id="min-order-warning" class="min-order-msg"></div>
-                <button id="checkout-btn" class="add-btn" style="width:100%; font-size: 1rem; padding: 12px;" onclick="handleCheckoutClick()" disabled>RENDELÉS LEADÁSA</button>
-            </div>
-
             <div class="info-card">
                 <h3 id="contact-title-text">📍 Kapcsolat</h3>
                 <p class="address-text-line"><strong><span id="address-label">Cím</span>:</strong> <span id="address-value">Corvinilor utca 28 szám</span></p>
                 <p><strong><span id="call-text">Hívás most</span>:</strong><br>
-                   <a href="tel:+40757462161" class="phone-link">📞 0757 462 161</a>
+                    <a href="tel:+40757462161" class="phone-link">📞 0757 462 161</a>
                 </p>
                 <h3 style="margin-top:20px" id="opening-title-text">🕒 Nyitvatartás</h3>
                 <ul class="opening-list">
@@ -123,306 +69,367 @@
         </div>
     </div>
 
-    <div id="order-overlay">
-        <div class="order-form">
-            <h3 style="margin-top:0" id="delivery-title-text">Szállítási adatok</h3>
-            <div class="input-group">
-                <input type="text" id="cust-name" placeholder="Teljes név" oninput="validateForm()">
-                <span id="star-name" class="required-star">*</span>
-            </div>
-            <div class="input-group">
-                <input type="text" id="cust-addr" placeholder="Cím (utca, házszám, emelet, apartament)" oninput="validateForm()">
-                <span id="star-addr" class="required-star">*</span>
-            </div>
-            <div class="input-group">
-                <input type="tel" id="cust-phone" placeholder="Telefonszám" oninput="validateForm()">
-                <span id="star-phone" class="required-star">*</span>
-            </div>
-            <div class="input-group">
-                <textarea id="cust-note" rows="2" placeholder="Megjegyzés"></textarea>
-            </div>
-            
-            <div style="margin: 15px 0;">
-                <label class="checkbox-row"><input type="checkbox" id="card-payment"> <span id="card-pay-text">Kártyával fizetés</span></label>
-                <label class="checkbox-row"><input type="checkbox" id="call-request"> <span id="callback-text">Kérek telefonos visszaigazolást.</span></label>
-                <label class="checkbox-row" style="margin-top:15px; position: relative;">
-                    <input type="checkbox" id="terms-accept" onchange="validateForm()"> 
-                    <span id="terms-text">Elolvastam és elfogadom a feltételeket.</span>
-                    <span id="star-terms" class="required-star" style="right:-15px; top:0;">*</span>
-                </label>
-                <div id="terms-content" class="terms-details"></div>
-            </div>
-            
-            <button id="final-send-btn" class="add-btn" style="background:#25D366; width:100%; padding: 14px;" onclick="sendWhatsApp()" disabled>Küldés WhatsApp-on</button>
-            <button class="back-btn" id="cancel-btn-text" style="margin-top:10px; border:none;" onclick="document.getElementById('order-overlay').style.display='none'">Mégse</button>
-        </div>
-    </div>
-
-    <div class="admin-box">
-        Forgalom: <span id="admin-revenue">0</span> lei | Rendelések: <span id="admin-count">0</span> db
-        <button onclick="localStorage.clear(); location.reload();" style="margin-left:10px; font-size:0.6rem;">Nullázás</button>
-    </div>
-
     <footer>Copyright © 2026 SC BlueBoxdesign SRL.</footer>
 
     <script>
-        const WHATSAPP_NUMBER = "40742901804";
-        const MIN_ORDER_VALUE = 30;
-        const PACKAGING_FEE = 4.5;
         let currentLang = 'hu';
-        let cart = [];
-
-        // ÚJ: Admin adatok betöltése
-        function updateAdminStats() {
-            document.getElementById('admin-revenue').innerText = localStorage.getItem('revenue') || '0';
-            document.getElementById('admin-count').innerText = localStorage.getItem('count') || '0';
-        }
 
         const translations = {
-            hu: { 
-                cartEmpty: "A kosarad üres.", total: "Összesen", orderBtn: "RENDELÉS LEADÁSA", backBtn: "← VISSZA A KATEGÓRIÁKHOZ", cartTitle: "🛒 Kosár", contactTitle: "📍 Kapcsolat", address: "Cím", addressValue: "Corvinilor utca 28 szám", callNow: "Hívás most", openingTitle: "🕒 Nyitvatartás", weekdays: "Hétköznap", saturday: "Szombat", sunday: "Vasárnap", deliveryTitle: "Szállítási adatok", terms: "Elolvastam és elfogadom a feltételeket.", 
-                termsContent: "Adatkezelési tájékoztató: A rendelés elküldésével Ön hozzájárul, hogy a Marinata Étterem kezelje a megadott személyes adatait (név, cím, telefonszám) kizárólag a rendelés visszaigazolása és a kiszállítás céljából.",
-                callback: "Kérek telefonos visszaigazolást.", cardPay: "Kártyával fizetés", sendBtn: "Küldés WhatsApp-on", cancelBtn: "Mégse", minOrderMsg: "Még {diff} lei a minimum rendelésig!", packaging: "Csomagolás", products: "Termékek", addToCart: "Kosárba",
-                placeholderAddr: "Cím (utca, házszám, emelet, apartament)", placeholderNote: "Megjegyzés", mobileOrder: "RENDELÉS LEADÁSA"
-            },
-            ro: { 
-                cartEmpty: "Coșul este gol.", total: "Total", orderBtn: "TRIMITE COMANDA", backBtn: "← ÎNAPOI LA CATEGORII", cartTitle: "🛒 COȘ", contactTitle: "📍 CONTACT", address: "Adresă", addressValue: "Str. Corvinilor nr. 28", callNow: "Sună acum", openingTitle: "🕒 PROGRAM", weekdays: "Luni - Vineri", saturday: "Sâmbătă", sunday: "Duminică", deliveryTitle: "Date de livrare", terms: "Am citit și accept termenii.", 
-                termsContent: "Notă de informare (GDPR): Prin trimiterea comenzii, sunteți de acord ca Restaurant Marinata să prelucreze datele dvs. personale (nume, adresă, telefon) exclusiv în scopul confirmării și livrării comenzii.",
-                callback: "Doresc confirmare telefonică.", cardPay: "Plata cu cardul", sendBtn: "Trimite pe WhatsApp", cancelBtn: "Anulează", minOrderMsg: "Mai aveți nevoie de {diff} lei!", packaging: "Ambalaj", products: "Produse", addToCart: "Adaugă",
-                placeholderAddr: "Adresă (stradă, număr, etaj, apartament)", placeholderNote: "Mențiuni", mobileOrder: "TRIMITE COMANDA"
-            }
+            hu: { backBtn: "← VISSZA A KATEGÓRIÁKHOZ", contactTitle: "📍 Kapcsolat", address: "Cím", addressValue: "Corvinilor utca 28 szám", callNow: "Hívás most", openingTitle: "🕒 Nyitvatartás", weekdays: "Hétköznap", saturday: "Szombat", sunday: "Vasárnap", ingLabel: "Összetevők: " },
+            ro: { backBtn: "← ÎNAPOI LA CATEGORII", contactTitle: "📍 CONTACT", address: "Adresă", addressValue: "Str. Corvinilor nr. 28", callNow: "Sună acum", openingTitle: "🕒 PROGRAM", weekdays: "Luni - Vineri", saturday: "Sâmbătă", sunday: "Duminică", ingLabel: "Ingrediente: " }
         };
 
-        const database = {
-            'reggeli': [{name:{hu:'Marinata omlett (250g)', ro:'Omletă Marinata (250g)'}, price:25},{name:{hu:'Toscana tükörtojás (250g)', ro:'Ochiuri Toscana (250g)'}, price:24}],
-            'starterek': [{name:{hu:'Vegyes bruschete (120g)', ro:'Bruschete mixte (120g)'}, price:34},{name:{hu:'Rántott sajt fehér szósszal (200g)', ro:'Cașcaval pane cu sos alb (200g)'}, price:40},{name:{hu:'Grillezzett camembert (200g)', ro:'Camembert la grătar (200g)'}, price:39},{name:{hu:'Rántott camembert burgonyával (230g)', ro:'Camembert pane cu cartofi (230g)'}, price:49}],
-            'salatak': [{name:{hu:'Cézár saláta (400g)', ro:'Salată Caesar (400g)'}, price:36},{name:{hu:'Tonhalas saláta (360g)', ro:'Salată cu ton (360g)'}, price:35},{name:{hu:'Görög saláta (400g)', ro:'Salată grecească (400g)'}, price:33},{name:{hu:'Csirkemelles saláta (400g)', ro:'Salată cu pui (400g)'}, price:37},{name:{hu:'Primavera saláta (400g)', ro:'Salată Primavera (400g)'}, price:37}],
-            'levesek': [{name:{hu:'Pacal csorba (400ml)', ro:'Ciorbă de burtă (400ml)'}, price:23},{name:{hu:'Babgulyás (400ml)', ro:'Gulaș de fasole (400ml)'}, price:23},{name:{hu:'Parasztcsorba marhahússal (400ml)', ro:'Ciorbă țărănească de văcuță (400ml)'}, price:23},{name:{hu:'Gomba krémleves (400ml)', ro:'Supă cremă de ciuperci (400ml)'}, price:24},{name:{hu:'Sajtkrémleves (400ml)', ro:'Supă cremă de brânză (400ml)'}, price:24},{name:{hu:'Radóci leves (400ml)', ro:'Ciorbă Rădăuțeană (400ml)'}, price:22},{name:{hu:'Jókai bableves (400ml)', ro:'Ciorbă de fasole Jókai (400ml)'}, price:34},{name:{hu:'Extra csípős paprika', ro:'Ardei iute extra'}, price:5},{name:{hu:'Extra tejföl', ro:'Smântână extra'}, price:5}],
-            'talak': [{name:{hu:'Grill tál (1.2kg)', ro:'Platou Grill (1.2kg)'}, price:265},{name:{hu:'Vegyes tál (0.8kg)', ro:'Platou Mixt (0.8kg)'}, price:255}],
-            'csirke': [{name:{hu:'Roston sült csirkemell (180g)', ro:'Piept de pui la grătar (180g)'}, price:39},{name:{hu:'Cornflakes rántott csirke (180g)', ro:'Pui în crustă de cornflakes (180g)'}, price:45},{name:{hu:'Feta-bacon töltött csirkemell (200g)', ro:'Piept de pui umplut cu feta és bacon (200g)'}, price:48},{name:{hu:'Pikáns crispy szárnyak (250g)', ro:'Aripioare crispy picante (250g)'}, price:46},{name:{hu:'Csirke palermói szelet (200g)', ro:'Pui Palermo (200g)'}, price:55},{name:{hu:'Marinata dippers csirke (230g)', ro:'Pui Marinata dippers (230g)'}, price:58},{name:{hu:'Hawaii csirkemell (250g)', ro:'Piept de pui Hawaii (250g)'}, price:58},{name:{hu:'Csirke paprikás (400g)', ro:'Papricaș de pui (400g)'}, price:55},{name:{hu:'Cordon Bleu csirkemellből (450g)', ro:'Cordon Bleu din piept de pui (450g)'}, price:48},{name:{hu:'Csirkemell gombás mártásban (400g)', ro:'Piept de pui în sos de ciuperci (400g)'}, price:59},{name:{hu:'Prézliben rántott csirke (180g)', ro:'Pui pane (180g)'}, price:45},{name:{hu:'Rántott sonkás-mangós csirke (200g)', ro:'Pui pane cu șuncă și mango (200g)'}, price:48}],
-            'sertes': [{name:{hu:'Sertés Palermó-i (200g)', ro:'Porc Palermo (200g)'}, price:50},{name:{hu:'Grillen készített tarja (200g)', ro:'Ceafă de porc la grătar (200g)'}, price:61},{name:{hu:'Cigány pecsenye (220g)', ro:'Friptură țigănească (220g)'}, price:61},{name:{hu:'Csontos-bőrös malac T-bone (250g)', ro:'T-bone de purcel cu șoric (250g)'}, price:75},{name:{hu:'Sertés oldalas BBQ (400g)', ro:'Coaste de porc BBQ (400g)'}, price:63},{name:{hu:'Mézes-mustáros oldalas (400g)', ro:'Coaste cu miere és muștar (400g)'}, price:65},{name:{hu:'Eiffel torony (450g)', ro:'Turnul Eiffel (450g)'}, price:67},{name:{hu:'Roppanós malaccsülök (850g)', ro:'Ciolan de purcel crocant (850g)'}, price:102},{name:{hu:'Prézliben rántott sertéshús (180g)', ro:'Carne de porc pane (180g)'}, price:45}],
-            'hal': [{name:{hu:'Roston sült lazac filé (200g)', ro:'File de somon la grătar (200g)'}, price:63},{name:{hu:'Roston sült pisztráng (230g)', ro:'Păstrăv la grătar (230g)'}, price:44},{name:{hu:'Kukoricalisztes pisztráng (230g)', ro:'Păstrăv în mălai (230g)'}, price:46},{name:{hu:'Szardella tál (500g)', ro:'Platou hamsii (500g)'}, price:58},{name:{hu:'Lazac salsa szósszal (400g)', ro:'Somon cu sos salsa (400g)'}, price:69},{name:{hu:'Garnélarák pankó morzsában (400g)', ro:'Creveți în crustă panko (400g)'}, price:60}],
-            'marha': [{name:{hu:'Pacal pörkölt galuskával (400g)', ro:'Tocăniță de burtă cu găluște (400g)'}, price:60},{name:{hu:'Csípős tál (220g)', ro:'Tigaie picantă (220g)'}, price:68}],
-            'burger': [{name:{hu:'Marha húsos burger (450g)', ro:'Burger de vită (450g)'}, price:53},{name:{hu:'Royal burger (450g)', ro:'Royal burger (450g)'}, price:55},{name:{hu:'Pulled porc burger (450g)', ro:'Pulled pork burger (450g)'}, price:53},{name:{hu:'Crispy csirke burger (450g)', ro:'Burger pui crispy (450g)'}, price:50},{name:{hu:'Marinata burger (450g)', ro:'Burger Marinata (450g)'}, price:64},{name:{hu:'Gyros tál/pitában (450g)', ro:'Platou Gyros / în pită (450g)'}, price:64},{name:{hu:'Miccs sült burgonyával (4db)', ro:'Mici cu cartofi prăjiți (4buc)'}, price:36},{name:{hu:'Dippers burgonya szamurájjal (230g)', ro:'Cartofi dippers cu sos samurai (230g)'}, price:26}],
-            'meleg_szosz': [{name:{hu:'Hiribi gomba szósz (80g)', ro:'Sos de hribi (80g)'}, price:12},{name:{hu:'Champignon gomba szósz (80g)', ro:'Sos de ciuperci champignon (80g)'}, price:11},{name:{hu:'Gorgonzola szósz (80g)', ro:'Sos gorgonzola (80g)'}, price:14},{name:{hu:'Édes savanyú szósz (80g)', ro:'Sos dulce acrișor (80g)'}, price:12},{name:{hu:'Fokhagyma szósz (80g)', ro:'Sos de usturoi (80g)'}, price:11}],
-            'teszta': [{name:{hu:'Carbonara spagetti (400g)', ro:'Spaghetti Carbonara (400g)'}, price:40},{name:{hu:'Penne arabiata (400g)', ro:'Penne Arrabbiata (400g)'}, price:37},{name:{hu:'Tagliatelle funghi porcini (400g)', ro:'Tagliatelle cu hribi (400g)'}, price:40},{name:{hu:'Csőben sült penne (400g)', ro:'Penne al forno (400g)'}, price:39},{name:{hu:'Csőben sült bolognese (400g)', ro:'Bolognese al forno (400g)'}, price:43},{name:{hu:'Garnélarákos cukkinis tészta (420g)', ro:'Paste cu creveți és dovlecei (420g)'}, price:48},{name:{hu:'Garnélarákos tagliatelle (420g)', ro:'Tagliatelle cu creveți (420g)'}, price:48},{name:{hu:'Milánói penne (400g)', ro:'Penne milanese (400g)'}, price:38},{name:{hu:'Quatro formaggi penne (400g)', ro:'Penne Quattro Formaggi (400g)'}, price:43},{name:{hu:'Carbonara penne (400g)', ro:'Penne Carbonara (400g)'}, price:42},{name:{hu:'Gnocchi carbonara al forno (400g)', ro:'Gnocchi Carbonara al forno (400g)'}, price:44},{name:{hu:'Gnocchi quattro formaggi (400g)', ro:'Gnocchi Quattro Formaggi (400g)'}, price:45},{name:{hu:'Túrós tepertős puliszka (230g)', ro:'Mămăligă cu brânză és jumări (230g)'}, price:39},{name:{hu:'Erdélyi puliszka (250g)', ro:'Mămăligă transilvăneană (250g)'}, price:42}],
-            'koretek': [{name:{hu:'Hasábburgonya (200g)', ro:'Cartofi prăjiți (200g)'}, price:12},{name:{hu:'Burgonya püré (200g)', ro:'Piure de cartofi (200g)'}, price:11},{name:{hu:'Wedges burgonya (200g)', ro:'Cartofi wedges (200g)'}, price:11},{name:{hu:'Arany burgonya (200g)', ro:'Cartofi aurii (200g)'}, price:12},{name:{hu:'Natúr burgonya (200g)', ro:'Cartofi natur (200g)'}, price:11},{name:{hu:'Rizses zöldség (200g)', ro:'Legume cu orez (200g)'}, price:10},{name:{hu:'Házi galuska (200g)', ro:'Găluște de casă (200g)'}, price:11},{name:{hu:'Puliszka (200g)', ro:'Mămăligă (200g)'}, price:12},{name:{hu:'Rizotto (200g)', ro:'Risotto (200g)'}, price:18}],
-            'savanyusag': [{name:{hu:'Káposzta saláta (150g)', ro:'Salată de varză (150g)'}, price:11},{name:{hu:'Paradicsom saláta (150g)', ro:'Salată de roșii (150g)'}, price:11},{name:{hu:'Paradicsom saláta telemeával (150g)', ro:'Salată de roșii cu telemea (150g)'}, price:11},{name:{hu:'Lilahagyma saláta (150g)', ro:'Salată de ceapă roșie (150g)'}, price:11},{name:{hu:'Friss uborka saláta (150g)', ro:'Salată de castraveți proaspeți (150g)'}, price:10},{name:{hu:'Friss vegyes saláta (150g)', ro:'Salată mixtă proaspătă (150g)'}, price:12},{name:{hu:'Vegyes savanyúság (150g)', ro:'Murături mixte (150g)'}, price:12},{name:{hu:'Cékla saláta (150g)', ro:'Salată de sfeclă (150g)'}, price:12}],
-            'pizza': [{name:{hu:'Pizza Salami (500g)', ro:'Pizza Salami (500g)'}, price:27},{name:{hu:'Margherita (500g)', ro:'Margherita (500g)'}, price:24},{name:{hu:'Funghi (550g)', ro:'Funghi (550g)'}, price:25},{name:{hu:'Prosciutto (550g)', ro:'Prosciutto (550g)'}, price:26},{name:{hu:'Capricciosa (600g)', ro:'Capricciosa (600g)'}, price:29},{name:{hu:'Diavolo (600g)', ro:'Diavolo (600g)'}, price:28},{name:{hu:'Peperoncino (300g)', ro:'Peperoncino (300g)'}, price:28},{name:{hu:'Dallas (600g)', ro:'Dallas (600g)'}, price:28.5},{name:{hu:'California (650g)', ro:'California (650g)'}, price:33},{name:{hu:'Ungarese (600g)', ro:'Ungarese (600g)'}, price:31},{name:{hu:'Tonno (600g)', ro:'Tonno (600g)'}, price:32},{name:{hu:'Parmegiano (600g)', ro:'Parmegiano (600g)'}, price:37},{name:{hu:'Americana (650g)', ro:'Americana (650g)'}, price:33},{name:{hu:'Mexicana (600g)', ro:'Mexicana (600g)'}, price:31},{name:{hu:'Carbonara (600g)', ro:'Carbonara (600g)'}, price:31},{name:{hu:'Giovanni (600g)', ro:'Giovanni (600g)'}, price:33},{name:{hu:'Messina (600g)', ro:'Messina (600g)'}, price:33},{name:{hu:'Sevilla (650g)', ro:'Sevilla (650g)'}, price:42},{name:{hu:'Mozzarelleg (600g)', ro:'Mozzarelleg (600g)'}, price:34},{name:{hu:'Milano (600g)', ro:'Milano (600g)'}, price:34},{name:{hu:'Cheddar (600g)', ro:'Cheddar (600g)'}, price:35},{name:{hu:'Quattro stagioni (650g)', ro:'Quattro stagioni (650g)'}, price:35},{name:{hu:'Quattro carni (650g)', ro:'Quattro carni (650g)'}, price:38},{name:{hu:'Quattro formaggi (600g)', ro:'Quattro formaggi (600g)'}, price:37},{name:{hu:'Pollo (600g)', ro:'Pollo (600g)'}, price:36},{name:{hu:'Palermo (600g)', ro:'Palermo (600g)'}, price:32},{name:{hu:'Marinata (600g)', ro:'Marinata (600g)'}, price:36},{name:{hu:'Hawai (600g)', ro:'Hawai (600g)'}, price:30.5},{name:{hu:'Florenza (600g)', ro:'Florenza (600g)'}, price:35},{name:{hu:'Vegetarian (600g)', ro:'Vegetarian (600g)'}, price:31}],
-            'specialis': [{name:{hu:'Calzone (600g)', ro:'Calzone (600g)'}, price:34},{name:{hu:'Focaccia (400g)', ro:'Focaccia (400g)'}, price:22}],
-            'desszert': [{name:{hu:'Vegyes fagyi (180g)', ro:'Înghețată mixtă (180g)'}, price:25},{name:{hu:'Pisztáciás szeletelt vékonypalacsinta (250g)', ro:'Clătite subțiri feliate cu fistic (250g)'}, price:32},{name:{hu:'Csoki szuflé (250g)', ro:'Sufleu de ciocolată (250g)'}, price:31},{name:{hu:'Finettis banános palacsinta (180g)', ro:'Clătite cu Finetti și banane (180g)'}, price:28},{name:{hu:'Túrós palacsinta (200g)', ro:'Clătite cu brânză (200g)'}, price:34},{name:{hu:'Áfanyás lekváros palacsinta (160g)', ro:'Clătite cu gem de afine (160g)'}, price:25},{name:{hu:'Papanasi áfonyával (200g)', ro:'Papanași cu afine (200g)'}, price:45},{name:{hu:'Papanasi áfonyával (100g)', ro:'Papanași cu afine (100g)'}, price:22.5}],
-            'kave_tea': [{name:{hu:'Ice coffe (200 ml)', ro:'Ice coffee (200 ml)'}, price:15},{name:{hu:'Espresso (30 ml)', ro:'Espresso (30 ml)'}, price:10},{name:{hu:'Capuccino espresso (100 ml)', ro:'Cappuccino espresso (100 ml)'}, price:11},{name:{hu:'Latte machiato (200 ml)', ro:'Latte macchiato (200 ml)'}, price:15},{name:{hu:'Sötét / fehér forró csoki (150 ml)', ro:'Ciocolată caldă neagră / albă (150 ml)'}, price:14},{name:{hu:'Gyógynövény / gyümölcs tea (250 ml)', ro:'Ceai de plante / fructe (250 ml)'}, price:10}],
-            'udito': [{name:{hu:'Vegyes limonádé (400 ml)', ro:'Limonadă mixtă (400 ml)'}, price:13},{name:{hu:'Vegyes limonádé (1000 ml)', ro:'Limonadă mixtă (1000 ml)'}, price:23},{name:{hu:'Aromás limonádé (400 ml)', ro:'Limonadă aromatizată (400 ml)'}, price:14},{name:{hu:'Aromás limonádé (1000 ml)', ro:'Limonadă aromatizată (1000 ml)'}, price:24},{name:{hu:'Coca Cola (Cola / Fanta) (250 ml)', ro:'Coca Cola (Cola / Fanta) (250 ml)'}, price:9.5},{name:{hu:'Schweppes (250 ml)', ro:'Schweppes (250 ml)'}, price:9.5},{name:{hu:'Cappy (250 ml)', ro:'Cappy (250 ml)'}, price:10},{name:{hu:'Fuze tea (250 ml)', ro:'Fuze tea (250 ml)'}, price:10},{name:{hu:'Dorna ásványvíz (330 ml)', ro:'Apă minerală Dorna (330 ml)'}, price:7},{name:{hu:'Dorna szénsavmentes víz (330 ml)', ro:'Apă plată Dorna (330 ml)'}, price:7},{name:{hu:'Ásványvíz (750 ml)', ro:'Apă minerală (750 ml)'}, price:14},{name:{hu:'Szénsavmentes víz (750 ml)', ro:'Apă plată (750 ml)'}, price:14},{name:{hu:'Klasszikus limonádé (400 ml)', ro:'Limonadă clasică (400 ml)'}, price:13},{name:{hu:'Klasszikus limonádé (1000 ml)', ro:'Limonadă clasică (1000 ml)'}, price:23},{name:{hu:'Fresh (250 ml)', ro:'Fresh (250 ml)'} , price:16}],
-            'sorok': [{name:{hu:'Ursus (500 ml)', ro:'Ursus (500 ml)'}, price:10},{name:{hu:'Ursus (330 ml)', ro:'Ursus (330 ml)'}, price:8.5},{name:{hu:'Ursus Black (330 ml)', ro:'Ursus Black (330 ml)'}, price:9},{name:{hu:'Ursus Retro (500 ml)', ro:'Ursus Retro (500 ml)'}, price:9},{name:{hu:'Alkoholmentes Ursus (500 ml)', ro:'Ursus fără alcool (500 ml)'}, price:8},{name:{hu:'Peroni (500 ml)', ro:'Peroni (500 ml)'}, price:11},{name:{hu:'Peroni (330 ml)', ro:'Peroni cu alcool / fără alcool (330 ml)'}, price:10},{name:{hu:'Peroni Stile Capri (330 ml)', ro:'Peroni Stile Capri (330 ml)'}, price:8.5},{name:{hu:'Timișoreana (500 ml)', ro:'Timișoreana (500 ml)'}, price:9},{name:{hu:'Kozel lager (330 ml)', ro:'Kozel lager (330 ml)'}, price:8.5},{name:{hu:'Kozel dark (330 ml)', ro:'Kozel dark (330 ml)'}, price:8.5},{name:{hu:'Corona (355 ml)', ro:'Corona (355 ml)'}, price:14},{name:{hu:'Pilsner Urquell (330 ml)', ro:'Pilsner Urquell (330 ml)'}, price:10},{name:{hu:'Azuga szűretlen (500 ml)', ro:'Azuga nefiltrată (500 ml)'}, price:13},{name:{hu:'Ursus korsó sör (400 ml)', ro:'Bere Ursus halbă (400 ml)'}, price:10},{name:{hu:'Ursus kis korsó sör (300 ml)', ro:'Bere Ursus țap (300 ml)'}, price:8},{name:{hu:'Peroni korsó sör (400 ml)', ro:'Peroni halbă (400 ml)'}, price:12},{name:{hu:'Peroni kis korsó sör (300 ml)', ro:'Peroni țap (300 ml)'}, price:9.5}],
-            'energia': [{name:{hu:'Burn (250 ml)', ro:'Burn (250 ml)'}, price:12},{name:{hu:'Red Bull (250 ml)', ro:'Red Bull (250 ml)'}, price:14}],
-            'roviditalok': [{name:{hu:'Jim Beam (50 ml)', ro:'Jim Beam (50 ml)'}, price:13},{name:{hu:'Jack Daniels (50 ml)', ro:'Jack Daniels (50 ml)'}, price:14},{name:{hu:'Házi szilvapálinka (50 ml)', ro:'Pălincă de casă de prune (50 ml)'}, price:12},{name:{hu:'Stalinskaya (50 ml)', ro:'Stalinskaya (50 ml)'}, price:12},{name:{hu:'Finlandia (50 ml)', ro:'Finlandia (50 ml)'}, price:12},{name:{hu:'Absolut (50 ml)', ro:'Absolut (50 ml)'}, price:12},{name:{hu:'Absolut citrom (50 ml)', ro:'Absolut lemon (50 ml)'}, price:12},{name:{hu:'Tequila (50 ml)', ro:'Tequila (50 ml)'}, price:12},{name:{hu:'Martini (Bianco, Rosso) (50 ml)', ro:'Martini (Bianco, Rosso) (50 ml)'}, price:12},{name:{hu:'Baileys (50 ml)', ro:'Baileys (50 ml)'}, price:12},{name:{hu:'Jidvei (50 ml)', ro:'Jidvei (50 ml)'}, price:12},{name:{hu:'Alexandrion (50 ml)', ro:'Alexandrion (50 ml)'}, price:12},{name:{hu:'Jägermeister (50 ml)', ro:'Jägermeister (50 ml)'}, price:12},{name:{hu:'Unicum (50 ml)', ro:'Unicum (50 ml)'}, price:12},{name:{hu:'Gin Tonic (250 ml)', ro:'Gin Tonic (250 ml)'}, price:25}],
-            'borok': [{name:{hu:'Sauvignon Blanc demisec (750 ml)', ro:'Sauvignon Blanc demisec (750 ml)'}, price:50},{name:{hu:'Traminer demidulce (750 ml)', ro:'Traminer demidulce (750 ml)'}, price:50},{name:{hu:'Riesling Italian sec (750 ml)', ro:'Riesling Italian sec (750 ml)'}, price:45},{name:{hu:'Rose demidulce (750 ml)', ro:'Rose demidulce (750 ml)'}, price:45},{name:{hu:'Cabernet Sauvignon sec (750 ml)', ro:'Cabernet Sauvignon sec (750 ml)'}, price:60},{name:{hu:'Merlot demisec (750 ml)', ro:'Merlot demisec (750 ml)'}, price:43},{name:{hu:'Vinul Casei (500 ml)', ro:'Vinul Casei (500 ml)'}, price:17},{name:{hu:'Vin la pahar (200 ml)', ro:'Vin la pahar (200 ml)'}, price:14}],
-            'szoszok_csomag': [{name:{hu:'Fehér szósz', ro:'Sos alb'}, price:4.5},{name:{hu:'Pikáns fehér szósz', ro:'Sos alb picant'}, price:5},{name:{hu:'Piros szósz', ro:'Sos roșu'}, price:4.5},{name:{hu:'Pikáns piros szósz', ro:'Sos roșu picant'}, price:5},{name:{hu:'Csomagolás', ro:'Ambalaj'}, price:4.5}]
-        };
-
-        const categories = [
-            { id: 'reggeli', hu: 'Reggeli', ro: 'Mic dejun', icon: '🍳' },
-            { id: 'starterek', hu: 'Starterek', ro: 'Startere', icon: '🥗' },
-            { id: 'salatak', hu: 'Saláták', ro: 'Salate', icon: '🍃' },
-            { id: 'levesek', hu: 'Levesek / Csorbák', ro: 'Supe / Ciorbe', icon: '🍲' },
-            { id: 'talak', hu: '3 személyes tálak', ro: 'Platouri 3 pers', icon: '🍽️' },
-            { id: 'csirke', hu: 'Csirke ételek', ro: 'Preparate pui', icon: '🍗' },
-            { id: 'sertes', hu: 'Sertés ételek', ro: 'Preparate porc', icon: '🥩' },
-            { id: 'hal', hu: 'Hal ételek', ro: 'Preparate pește', icon: '🐟' },
-            { id: 'marha', hu: 'Marha ételek', ro: 'Preparate vită', icon: '🍖' },
-            { id: 'burger', hu: 'Burgerek & Mixek', ro: 'Burgeri & Mixuri', icon: '🍔' },
-            { id: 'meleg_szosz', hu: 'Meleg szószok', ro: 'Sosuri calde', icon: '🍯' },
-            { id: 'teszta', hu: 'Tészták & Puliszkák', ro: 'Paste & Mămăligă', icon: '🍝' },
-            { id: 'koretek', hu: 'Köretek', ro: 'Garnituri', icon: '🍟' },
-            { id: 'savanyusag', hu: 'Saláták / Savanyúk', ro: 'Salate / Murături', icon: '🥒' },
-            { id: 'pizza', hu: 'Pizza', ro: 'Pizza', icon: '🍕' },
-            { id: 'specialis', hu: 'Specialitások', ro: 'Specialități', icon: '🌟' },
-            { id: 'desszert', hu: 'Desszertek', ro: 'Deserturi', icon: '🍰' },
-            { id: 'kave_tea', hu: 'Kávé, Tea, Csoki', ro: 'Cafea, Ceai, Ciocolată', icon: '☕' },
-            { id: 'udito', hu: 'Üdítő, Fresh, Limonádé', ro: 'Răcoritoare, Fresh, Limonadă', icon: '🥤' },
-            { id: 'sorok', hu: 'Sörök', ro: 'Bere', icon: '🍺' },
-            { id: 'energia', hu: 'Energia italok', ro: 'Băuturi energizante', icon: '⚡' },
-            { id: 'roviditalok', hu: 'Röviditalok', ro: 'Băuturi spirtoase', icon: '🥃' },
-            { id: 'borok', hu: 'Borok', ro: 'Vinuri', icon: '🍷' },
-            { id: 'szoszok_csomag', hu: 'Szószok & Csomagolás', ro: 'Sosuri & Ambalaj', icon: '🥡' }
-        ];
-
-        function changeLang(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + lang).classList.add('active');
-            
-            document.getElementById('cart-title-text').innerText = translations[lang].cartTitle;
-            document.getElementById('contact-title-text').innerText = translations[lang].contactTitle;
-            document.getElementById('address-label').innerText = translations[lang].address;
-            document.getElementById('address-value').innerText = translations[lang].addressValue;
-            document.getElementById('call-text').innerText = translations[lang].callNow;
-            document.getElementById('opening-title-text').innerText = translations[lang].openingTitle;
-            document.getElementById('weekdays-text').innerText = translations[lang].weekdays;
-            document.getElementById('saturday-text').innerText = translations[lang].saturday;
-            document.getElementById('sunday-text').innerText = translations[lang].sunday;
-            document.getElementById('back-btn-text').innerText = translations[lang].backBtn;
-            document.getElementById('total-text').innerText = translations[lang].total;
-            document.getElementById('checkout-btn').innerText = translations[lang].orderBtn;
-            document.getElementById('delivery-title-text').innerText = translations[lang].deliveryTitle;
-            document.getElementById('cust-addr').placeholder = translations[lang].placeholderAddr;
-            document.getElementById('cust-note').placeholder = translations[lang].placeholderNote;
-            document.getElementById('card-pay-text').innerText = translations[lang].cardPay;
-            document.getElementById('callback-text').innerText = translations[lang].callback;
-            document.getElementById('terms-text').innerText = translations[lang].terms;
-            document.getElementById('terms-content').innerText = translations[lang].termsContent;
-            document.getElementById('final-send-btn').innerText = translations[lang].sendBtn;
-            document.getElementById('cancel-btn-text').innerText = translations[lang].cancelBtn;
-            document.getElementById('mobile-order-text').innerText = translations[lang].mobileOrder;
-
-            init();
-            renderCart();
+       const database = {
+    'reggeli': [
+        { name: { hu: 'Marinata omlett 250 Gr-690 kal.', ro: 'Omletă Marinata 250 Gr-690 kal.' }, price: 25, ing: { hu: '<span style="color:red;">Tojás</span>, bacon, szalonna, vöröshagyma, <span style="color:red;">mozzarella</span>, paradicsom, <span style="color:red;">pirított kenyér (liszt)</span>', ro: '<span style="color:red;">Ouă</span>, bacon, slănină, ceapă roșie, <span style="color:red;">mozzarella</span>, roșii, <span style="color:red;">pâine prăjită (făină)</span>' } },
+        { name: { hu: 'Toscana tükörtojás 250 Gr-685 kal.', ro: 'Ochiuri Toscana 250 Gr-685 kal.' }, price: 24, ing: { hu: '<span style="color:red;">Tükörtojás</span>, bacon, paradicsom, uborka, csípős paprika, <span style="color:red;">majonéz (tojás, mustár)</span>, <span style="color:red;">pirított kenyér (liszt)</span>', ro: '<span style="color:red;">Ouă ochiuri</span>, bacon, roșii, castraveți, ardei iute, <span style="color:red;">maioneză (ou, muștar)</span>, <span style="color:red;">pâine prăjită (făină)</span>' } }
+    ],
+    'starterek': [
+        { name: { hu: 'Vegyes bruschete 120 Gr-465 kal.', ro: 'Bruschete mixte 120 Gr-465 kal.' }, price: 34, ing: { hu: '<span style="color:red;">Kenyér (liszt)</span>, paradicsom, prosciutto crudo, <span style="color:red;">tonhal*</span>, rukkola, kukorica', ro: '<span style="color:red;">Pâine (făină)</span>, roșii, prosciutto crudo, <span style="color:red;">ton*</span>, rucola, porumb' } },
+        { name: { hu: 'Rántott sajt fehér szósszal 200 Gr-950 kal.', ro: 'Caș pane cu sos alb 200 Gr-950 kal.' }, price: 40, ing: { hu: '<span style="color:red;">Mozzarella, tojás, liszt</span>, prézli, olaj, <span style="color:red;">joghurt</span>, fűszerek', ro: '<span style="color:red;">Mozzarella, ou, făină</span>, pesmet, ulei, <span style="color:red;">iaurt</span>, condimente' } },
+        { name: { hu: 'Grillezett camembert áfonya lekvárral 200 Gr-300 kal.', ro: 'Camembert la grătar cu dulceață de afine 200 Gr-300 kal.' }, price: 39, ing: { hu: '<span style="color:red;">Camembert</span>, áfonya lekvár', ro: '<span style="color:red;">Camembert</span>, dulceață de afine' } },
+        { name: { hu: 'Rántott camembert sült burgonyával 230 Gr-750 kal.', ro: 'Camembert pane cu cartofi prăjiți și gem de afine 230 Gr-750 kal.' }, price: 49, ing: { hu: '<span style="color:red;">Camembert, tojás, liszt</span>, prézli, burgonya*, olaj, áfonya lekvár', ro: '<span style="color:red;">Camembert, ou, făină</span>, pesmet, cartofi*, ulei, gem de afine' } }
+    ],
+    'salatak': [
+        { name: { hu: 'Cézár saláta 400 Gr-900 kal.', ro: 'Salată Cezar 400 Gr-900 kal.' }, price: 36, ing: { hu: 'Iceberg saláta, csirkemell*, cherry paradicsom, lilahagyma, <span style="color:red;">parmezán</span>, prosciutto crudo, öntet, <span style="color:red;">pirított kenyér (liszt), főtt tojás</span>', ro: 'Salată iceberg, piept de pui*, rosii cherry, ceapă roșie, <span style="color:red;">parmezan</span>, prosciutto crudo, dressing, <span style="color:red;">pâine prăjită, ou fiert</span>' } },
+        { name: { hu: 'Tonhalas saláta 360 Gr-932 kal.', ro: 'Salată cu ton 360 Gr-932 kal.' }, price: 35, ing: { hu: 'Iceberg saláta, cherry paradicsom, lilahagyma, bab, <span style="color:red;">tonhal*</span>, öntet, <span style="color:red;">pirított kenyér kockák (liszt)</span>', ro: 'Salată iceberg, roșii cherry, ceapă roșie, fasole roșie, porumb, <span style="color:red;">ton*</span>, dressing, <span style="color:red;">crutoane</span>' } },
+        { name: { hu: 'Görög saláta 400 Gr-940 kal.', ro: 'Salată Grecească 400 Gr-940 kal.' }, price: 33, ing: { hu: 'Iceberg saláta, cherry paradicsom, lilahagyma, paprika, <span style="color:red;">feta sajt</span>, oliva olaj, <span style="color:red;">pirított kenyér kockák (liszt)</span>', ro: 'Salată iceberg, roșii cherry, ceapă roșie, ardei gras, <span style="color:red;">feta</span>, ulei de măsline, <span style="color:red;">crutoane</span>' } },
+        { name: { hu: 'Csirkemelles saláta 400 Gr-900 kal.', ro: 'Salată cu piept de pui 400 Gr-900 kal.' }, price: 37, ing: { hu: 'Iceberg saláta, paradicsom, uborka, lilahagyma, csirkemell*, prosciutto crudo, <span style="color:red;">fehér szósz (tej, tojás)</span>, <span style="color:red;">pirítos kenyér (liszt)</span>', ro: 'Salată iceberg, roșii, castraveți, ceapă roșie, piept de pui*, prosciutto crudo, <span style="color:red;">sos alb</span>, <span style="color:red;">pâine prăjită</span>' } },
+        { name: { hu: 'Primavera saláta 400 Gr-900 kal.', ro: 'Salată Primavera 400 Gr-900 kal.' }, price: 37, ing: { hu: 'Iceberg saláta, cherry paradicsom, paprika, uborka, csirkemell*, <span style="color:red;">főtt tojás</span>, öntet, <span style="color:red;">pirított kenyér kockák (liszt)</span>', ro: 'Salată iceberg, roșii cherry, ardei gras, castraveți, piept de pui*, <span style="color:red;">ou fiert</span>, dressing, <span style="color:red;">crutoane</span>' } }
+    ],
+    'harom_szemelyes_talak': [
+        { name: { hu: 'Grill tál (3 személyes) 1.2 kg-3400 kal.', ro: 'Platou grill (3 persoane) 1.2 kg-3400 kal.' }, price: 265, ing: { hu: 'Roston sült tarja*, bacon-ba tekert csirkemell*, roston sült csülök*, oldalas* BBQ szósszal, <span style="color:red;">steak burgonya*</span>, rizs, sült szalonna, <span style="color:red;">marha burger (liszt)</span>, savanyúság', ro: 'Ceafă la grătar*, piept de pui* în bacon, ciolan la grătar*, scăriță* cu sos BBQ, cartofi steak*, orez, creastă de slănină, burger de vită, murături' } },
+        { name: { hu: 'Vegyes tál (3 személyes) 0.8 kg-3500 kal.', ro: 'Platou mixt (3 persoane) 0.8 kg-3500 kal.' }, price: 255, ing: { hu: '<span style="color:red;">Rántott sajt (liszt, tojás, tej)</span>, <span style="color:red;">csirke crispy* (liszt, tojás)</span>, <span style="color:red;">cordon bleu* (liszt, tojás, tej)</span>, <span style="color:red;">hasábburgonya*</span>, zöldséges risotto, <span style="color:red;">Royal Burger (liszt, tojás, tej)</span>, friss vegyes saláta', ro: '<span style="color:red;">Cașcaval pane, crispy pui*, cordon bleu*</span>, cartofi prăjiți*, risotto cu legume, <span style="color:red;">Royal Burger</span>, salată asortată' } }
+    ],
+    'levesek': [
+        { name: { hu: 'Pacal csorba 400 ml-270 kal.', ro: 'Ciorbă de burtă 400 ml-270 kal.' }, price: 23, ing: { hu: 'Víz, marha pacal*, marha lábszár, <span style="color:red;">tejföl</span>, sárgarépa, <span style="color:red;">tojás, liszt</span>, fokhagyma, fűszerek', ro: 'Apă, burtă de vită*, oase de vită, <span style="color:red;">smântână</span>, morcovi, <span style="color:red;">ouă, făină</span>, usturoi, condimente' } },
+        { name: { hu: 'Babgulyás 400 ml-420 kal.', ro: 'Babgulyás 400 ml-420 kal.' }, price: 23, ing: { hu: 'Víz, bab, sertéshús, füstölt csülök*, sárgarépa, fokhagyma, petrezselyem, peszternák, <span style="color:red;">zeller</span>, fűszerek', ro: 'Apă, fasole, carne de porc, ciolan afumat*, morcovi, usturoi, pătrunjel, păstârnac, <span style="color:red;">țelină</span>, condimente' } },
+        { name: { hu: 'Parasztcsorba marhahúsra 400ml-390 kal.', ro: 'Ciorbă țărănească de văcuță 400ml-390 kal.' }, price: 23, ing: { hu: 'Víz, marhahús, sárgarépa, hagyma, <span style="color:red;">zeller</span>, peszternák, petrezselyem, borsó, burgonya, fűszerek', ro: 'Apă, carne de vită, morcovi, ceapă, <span style="color:red;">țelină</span>, păstârnac, pătrunjel, mazăre, cartofi, condimente' } },
+        { name: { hu: 'Gomba krémleves 400 ml-215 kal.', ro: 'Supă cremă de hribe 400 ml-215 kal.' }, price: 24, ing: { hu: 'Víz, hiriba gomba, fokhagyma, babérlevél, száraz fehér bor, <span style="color:red;">vaj, liszt, Gran Cuccina tejszín, pirított kenyér kocka (liszt)</span>', ro: 'Apă, hribi, usturoi, foi de dafin, vin alb sec, <span style="color:red;">unt, făină, sos Gran Cuccina, crutoane</span>' } },
+        { name: { hu: 'Sajtkrémleves 400 ml-215 kal.', ro: 'Supă cremă de cașcaval 400 ml-215 kal.' }, price: 24, ing: { hu: 'Víz, <span style="color:red;">vaj, liszt, Gran Cuccina tejszín</span>, fehér bor, só, bors, <span style="color:red;">sajt</span>, <span style="color:red;">pirított kenyér kocka (liszt)</span>', ro: 'Apă, <span style="color:red;">unt, făină, sos Gran Cuccina</span>, vin alb, sare, piper, <span style="color:red;">cașcaval, crutoane</span>' } },
+        { name: { hu: 'Radóci leves csirke hússal 400 ml-250 kal.', ro: 'Supă Rădăuțeană de pui 400 ml-250 kal.' }, price: 22, ing: { hu: 'Víz, csirkemell*, <span style="color:red;">tejföl</span>, marhalábszár, sárgarépa, <span style="color:red;">tojás, liszt</span>, fokhagyma, fűszerek', ro: 'Apă, piept de pui*, <span style="color:red;">smântână</span>, oase de vită, morcovi, <span style="color:red;">ouă, usturoi, făină</span>, condimente' } },
+        { name: { hu: 'Jókai bableves 400 ml-440 kal.', ro: 'Supă de fasole Jókai 400 ml-440 kal.' }, price: 34, ing: { hu: 'Víz, bab, sertéshús, füstölt csülök*, <span style="color:red;">házi galuska (liszt, tojás)</span>, sárgarépa, fokhagyma, <span style="color:red;">liszt, tej</span>, petrezselyem, <span style="color:red;">zeller</span>, peszternák, fűszerek', ro: 'Apă, fasole, carne de porc, ciolan afumat*, <span style="color:red;">găluște de casă, morcovi, făină, lapte, țelină</span>' } },
+        { name: { hu: 'Extra csípős paprika', ro: 'Extra ardei iute' }, price: 5, ing: { hu: 'Paprika', ro: 'Ardei iute' } },
+        { name: { hu: 'Extra tejföl', ro: 'Extra smântână' }, price: 5, ing: { hu: '<span style="color:red;">Tejföl</span>', ro: '<span style="color:red;">Smântână</span>' } }
+    ],
+    'csirke': [
+        { name: { hu: 'Roston sült csirkemell 180 Gr-200 kal.', ro: 'Piept de pui la grătar 180 Gr-200 kal.' }, price: 39, ing: { hu: 'Csirkemell*, fűszerek', ro: 'Piept de pui*, condimente' } },
+        { name: { hu: 'Cornflaks-ben rántott csirke 180 Gr-350 kal.', ro: 'Șnițel de pui în cornflakes 180 Gr-350 kal.' }, price: 45, ing: { hu: 'Csirkemell*, cornflakes, olaj, <span style="color:red;">liszt, tojás</span>', ro: 'Piept de pui*, cornflakes, ulei, <span style="color:red;">făină, ou</span>' } },
+        { name: { hu: 'Fetával és bacon-al töltött csirkemell 200 Gr-580 kal.', ro: 'Piept de pui umplut cu feta și bacon 200 Gr-580 kal.' }, price: 48, ing: { hu: 'Csirkemell*, bacon, <span style="color:red;">feta sajt</span>, olaj, <span style="color:red;">liszt, tojás</span>, prézli, fokhagyma, kapor', ro: 'Piept de pui*, bacon, <span style="color:red;">feta</span>, ulei, <span style="color:red;">făină, ou</span>, pesmet, usturoi, mărar' } },
+        { name: { hu: 'Pikáns crispy csirkeszárnyak 250 Gr-250 kal.', ro: 'Aripioare picante de pui crispy 250 Gr-250 kal.' }, price: 46, ing: { hu: 'Csirkeszárnyak*, olaj, chilly, fokhagyma', ro: 'Aripioare de pui*, ulei, ardei iute, usturoi' } },
+        { name: { hu: 'Csirke palermói szelet pürével 200 Gr-580 kal.', ro: 'Șnițel Palermo din pui cu piure 200 Gr-580 kal.' }, price: 55, ing: { hu: 'Csirkemell*, burgonya, <span style="color:red;">liszt, tojás, tejszín, vaj, sajt</span>', ro: 'Piept de pui*, cartofi, <span style="color:red;">făină, ou, smântână dulce, unt, cașcaval</span>' } },
+        { name: { hu: 'Marinata csirkemell dippers burgonyával 230 Gr-550 kal.', ro: 'Piept de pui Marinata cu cartofi dippers 230 Gr-550 kal.' }, price: 58, ing: { hu: 'Csirkemell*, <span style="color:red;">camembert sajt</span>, alma, dippers burgonya*', ro: 'Piept de pui*, <span style="color:red;">camembert</span>, măr, cartofi dippers*' } },
+        { name: { hu: 'Hawaii csirkemell steak burgonyával 250 gr-680 kal.', ro: 'Piept de pui Hawaii cu cartofi steak 250 gr-680 kal.' }, price: 58, ing: { hu: 'Csirkemell*, <span style="color:red;">sajt</span>, ananász, steak burgonya*', ro: 'Piept de pui*, <span style="color:red;">cașcaval</span>, ananas, cartofi steak*' } },
+        { name: { hu: 'Csirke paprikás galuskával 400 Gr-850 kal.', ro: 'Papricaș de pui cu găluște 400 Gr-850 kal.' }, price: 55, ing: { hu: 'Csirkemell*, <span style="color:red;">tejszín, liszt, tojás</span>, pirospaprika', ro: 'Piept de pui*, <span style="color:red;">smântână dulce, făină, ou</span>, boia' } },
+        { name: { hu: 'Cordon Bleu sajtszósszal 450 Gr-779 kal.', ro: 'Cordon Bleu din piept de pui 450 Gr-779 kal.' }, price: 48, ing: { hu: 'Csirkemell*, sonka, <span style="color:red;">sajt</span>, olaj, <span style="color:red;">liszt</span>, prézli, <span style="color:red;">tojás, parmezán</span>', ro: 'Piept de pui*, șuncă, <span style="color:red;">cașcaval</span>, ulei, <span style="color:red;">făină</span>, pesmet, <span style="color:red;">ou, parmezan</span>' } },
+        { name: { hu: 'Csirkemell kapros-tejfölös mártásban 400 Gr-995 kal.', ro: 'Piept de pui în sos de smântână și mărar 400 Gr-995 kal.' }, price: 59, ing: { hu: 'Csirkemell*, burgonya, gomba, <span style="color:red;">liszt, vaj, tejföl</span>, kapor', ro: 'Piept de pui*, cartofi, ciuperci, <span style="color:red;">făină, unt, smântână</span>, mărar' } },
+        { name: { hu: 'Prézliben rántott csirkehús 180 Gr-480 kal.', ro: 'Șnițel de pui în crustă de pesmet 180 Gr-480 kal.' }, price: 45, ing: { hu: 'Csirke filé*, <span style="color:red;">tojás, liszt</span>, prézli', ro: 'File de pui*, <span style="color:red;">ouă, făină</span>, pesmet' } },
+        { name: { hu: 'Rántott sonkás mangós csirkemell 200g-520 kal.', ro: 'Piept de pui cu șuncă și mango 200g-520 kal.' }, price: 48, ing: { hu: 'Csirkemell*, sonka, mangó, <span style="color:red;">mozzarella</span>, rukkola, <span style="color:red;">tojás, liszt</span>, pankó morzsa', ro: 'Piept de pui*, șuncă, mango, <span style="color:red;">mozzarella</span>, ruccola, <span style="color:red;">ouă, făină</span>, pesmet' } }
+    ],
+    'sertes': [
+        { name: { hu: 'Sertés Palermó-i 200Gr-800 kal.', ro: 'Palermo de porc 200Gr-800 kal.' }, price: 50, ing: { hu: 'Sertés karaj*, olaj, prézli, <span style="color:red;">liszt, tojás, mozzarella</span>', ro: 'Cotlet de porc*, ulei, pesmet, <span style="color:red;">făină, ouă, mozarella</span>' } },
+        { name: { hu: 'Grillen készitett sertés tarja 200 Gr-980 kal.', ro: 'Ceafă la grătar cu cartofi prăjiți 200 Gr-980 kal.' }, price: 61, ing: { hu: 'Sertés tarja*, burgonya*, olaj, paradicsom, uborka, hagyma', ro: 'Ceafă de porc*, cartofi*, ulei, salată, roșii, castraveți, ceapă' } },
+        { name: { hu: 'Cigány pecsenye burgonya pürével 220 gr-980 kal.', ro: 'Ceafă țigănească cu cartofi piure 220 gr-980 kal.' }, price: 61, ing: { hu: 'Sertés tarja*, ropogós szalonna, <span style="color:red;">tükörtojás</span>, csípőspaprika krém, burgonya, <span style="color:red;">tej, vaj</span>', ro: 'Ceafă de porc*, creață de slănină, <span style="color:red;">ochi de ou</span>, pastă de ardei iute, cartofi, <span style="color:red;">lapte, unt</span>' } },
+        { name: { hu: 'Csontos-bőrös malac T-bone 250Gr-762 kal.', ro: 'T-bone de purcel cu piele și os 250Gr-762 kal.' }, price: 75, ing: { hu: 'Malac T-bone*, olaj, fokhagyma', ro: 'T-bone de purcel*, ulei, usturoi' } },
+        { name: { hu: 'Sertés oldalas wedges burgonyával 400 gr-930 kal.', ro: 'Scăriță de porc cu cartofi wedges 400 gr-930 kal.' }, price: 63, ing: { hu: 'Sertés oldalas*, burgonya*, paradicsom püré, cukor, ecet', ro: 'Scăriță de porc*, cartofi*, sos-pireu roșii, zahăr, oțet' } },
+        { name: { hu: 'Mézes mustáros sertés oldalas 400 Gr-1020 kal.', ro: 'Scăriță de porc în sos de miere és muștar 400 Gr-1020 kal.' }, price: 65, ing: { hu: 'Sertés oldalas*, steak burgonya*, méz, fokhagyma, <span style="color:red;">mustár</span>', ro: 'Scăriță de porc*, cartof steak*, miere, usturoi, <span style="color:red;">muștar</span>' } },
+        { name: { hu: 'Eiffel torony burgonya pürével 450 Gr-995 kal.', ro: 'Turnul Eiffel cu piure de cartofi 450 Gr-995 kal.' }, price: 67, ing: { hu: 'Sertés tarja*, csülök szelet*, csirkemell*, szalonna, burgonya, <span style="color:red;">tej, vaj</span>', ro: 'Ceafă de porc*, felie de ciolan*, piept de pui*, slănină, cartofi, <span style="color:red;">unt, lapte</span>' } },
+        { name: { hu: 'Roppanós malaccsülök 850 Gr-1080 kal.', ro: 'Ciolan crocant de purcel 850 Gr-1080 kal.' }, price: 102, ing: { hu: 'Sertés csülök*, bab vagy burgonya*, olaj, fokhagyma, <span style="color:red;">liszt</span>, hagyma, paprika', ro: 'Ciolan de porc*, fasole sau cartofi*, ulei, usturoi, <span style="color:red;">făină</span>, ceapă, ardei' } },
+        { name: { hu: 'Prézliben rántott sertéshús 180 Gr-480 kal.', ro: 'Șnițel de porc în crustă de pesmet 180 Gr-480 kal.' }, price: 45, ing: { hu: 'Sertés filé*, <span style="color:red;">tojás, liszt</span>, prézli', ro: 'File de porc*, <span style="color:red;">ouă, făină</span>, pesmet' } }
+    ],
+    'halak': [
+        { name: { hu: 'Roston sült lazac filé 200 Gr-550 kal.', ro: 'File de somon la grătar 200 Gr-550 kal.' }, price: 63, ing: { hu: '<span style="color:red;">Lazac*</span>, burgonya, <span style="color:red;">tejszín</span>, kapor', ro: '<span style="color:red;">Somon*</span>, cartofi, <span style="color:red;">smântână dulce</span>, mărar' } },
+        { name: { hu: 'Roston sült pisztráng 230 Gr-371 kal.', ro: 'Păstrăv la grătar 230 Gr-371 kal.' }, price: 44, ing: { hu: '<span style="color:red;">Pisztráng*</span>, citrom', ro: '<span style="color:red;">Păstrăv*</span>, lămâie' } },
+        { name: { hu: 'Kukorica lisztben sült pisztráng 230 gr-410 kal.', ro: 'Păstrăv în făină de mălai 230 gr-410 kal.' }, price: 46, ing: { hu: '<span style="color:red;">Pisztráng*</span>, citrom, kukorica liszt', ro: '<span style="color:red;">Păstrăv*</span>, lămâie, făină de mălai' } },
+        { name: { hu: 'Szardella tál 500 Gr-370 kal.', ro: 'Platou hamsii 500 Gr-370 kal.' }, price: 58, ing: { hu: '<span style="color:red;">Szardella*</span>, sült burgonya*, fokhagyma szósz', ro: '<span style="color:red;">Hamsii*</span>, cartofi pai*, mujdei' } },
+        { name: { hu: 'Lazac salsa szósszal 400 Gr-600 kal.', ro: 'Somon cu salsa 400 Gr-600 kal.' }, price: 69, ing: { hu: '<span style="color:red;">Lazac*</span>, burgonya, fehér bor', ro: '<span style="color:red;">Somon*</span>, cartofi, vin alb' } },
+        { name: { hu: 'Garnélarák pankó morzsában 400 Gr-820 kal.', ro: 'Creveți în crustă panco 400 Gr-820 kal.' }, price: 60, ing: { hu: '<span style="color:red;">Garnélarák*</span>, sült burgonya*, <span style="color:red;">tojás, liszt</span>, prézli', ro: '<span style="color:red;">Creveți*</span>, cartofi prăjiți*, <span style="color:red;">ouă, făină</span>, pesmet' } }
+    ],
+    'marha': [
+        { name: { hu: 'Pacal pörkölt galuskával 400 Gr-917 kal.', ro: 'Tocăniță de burtă de vită cu găluște 400 Gr-917 kal.' }, price: 60, ing: { hu: 'Marha pacal*, <span style="color:red;">liszt, tojás</span>, vörös bor, galuska', ro: 'Burtă de vită*, <span style="color:red;">făină, ou</span>, vin roșu, găluște' } },
+        { name: { hu: 'Csípős tál 220 Gr-646 kal.', ro: 'Tigaie picantă 220 Gr-646 kal.' }, price: 68, ing: { hu: 'Marha bélszín*, bacon, vörös bab, kukorica, gomba', ro: 'Muchi de vită*, bacon, fasole roșie, porumb, ciuperci' } }
+    ],
+    'burger': [
+        { name: { hu: 'Marha húsos burger 450 Gr-1120 kal.', ro: 'Burger de vită 450 Gr-1120 kal.' }, price: 53, ing: { hu: 'Marha hús*, édes burgonya*, burger szósz (<span style="color:red;">tojás, mustár</span>), <span style="color:red;">tojás, cedár sajt</span>, bacon, <span style="color:red;">zsemle (liszt)</span>', ro: 'Carne de vită*, cartofi dulce*, sos burger, <span style="color:red;">ou, cedar</span>, bacon, <span style="color:red;">chiflă (făină)</span>' } },
+        { name: { hu: 'Royal burger 450 Gr-1414 kal.', ro: 'Royal burger 450 Gr-1414 kal.' }, price: 55, ing: { hu: 'Csirke hús*, <span style="color:red;">tojás</span>, bacon, <span style="color:red;">fehér szósz (tej), camembert sajt, cedár sajt</span>, burgonya*, <span style="color:red;">zsemle (liszt)</span>', ro: 'Carne de pui*, <span style="color:red;">ou</span>, bacon, <span style="color:red;">sos alb, camembert, cedar</span>, cartofi*, <span style="color:red;">chiflă (făină)</span>' } },
+        { name: { hu: 'Pulled porc burger 450 Gr-1651 kal.', ro: 'Pulled porc burger 450 Gr-1651 kal.' }, price: 53, ing: { hu: 'Sertéshús*, BBQ szósz, paradicsom, hagyma, <span style="color:red;">zsemle (liszt)</span>', ro: 'Carne de porc*, sos BBQ, roșii, ceapă, <span style="color:red;">chiflă (făină)</span>' } },
+        { name: { hu: 'Crispy csirke burger 450 Gr-1036 kal.', ro: 'Crispy chicken burger 450 Gr-1036 kal.' }, price: 50, ing: { hu: 'Csirke hús*, hasábburgonya*, <span style="color:red;">fehér szósz (tej), camembert sajt</span>, <span style="color:red;">zsemle (liszt)</span>', ro: 'Carne de pui*, cartofi pai*, <span style="color:red;">sos alb, camembert</span>, <span style="color:red;">chiflă (făină)</span>' } },
+        { name: { hu: 'Marinata burger 450 Gr-1133 kal.', ro: 'Marinata burger 450 Gr-1133 kal.' }, price: 64, ing: { hu: 'Marha hús 2 darab*, hasábburgonya*, burger szósz (<span style="color:red;">tojás</span>), <span style="color:red;">cedár sajt</span>, bacon, <span style="color:red;">zsemle (liszt)</span>', ro: 'Carne de vită 2 buc*, cartofi pai*, sos burger, <span style="color:red;">cedar</span>, bacon, <span style="color:red;">chiflă (făină)</span>' } },
+        { name: { hu: 'Gyros tányéron / pitában 450 Gr-1133 kal.', ro: 'Gyros la farfurie / lipie 450 Gr-1133 kal.' }, price: 64, ing: { hu: 'Gyros hús*, hasábburgonya*, <span style="color:red;">fehér szósz (tej), sajt</span>, ketchup, <span style="color:red;">pita (liszt)</span>', ro: 'Carne gyros*, cartofi pai*, <span style="color:red;">sos alb, cașcaval</span>, ketchup, <span style="color:red;">lipie (făină)</span>' } },
+        { name: { hu: 'Miccs sült burgonyával 4 drb 250 Gr-760 kal.', ro: 'Mititei cu cartofi prăjiți 4 buc 250 Gr-760 kal.' }, price: 36, ing: { hu: 'Miccs*, burgonya*, <span style="color:red;">mustár</span>', ro: 'Mititei*, cartofi*, <span style="color:red;">muștar</span>' } },
+        { name: { hu: 'Dippers burgonya szamuráj szósszal 230 Gr-290 kal.', ro: 'Cartofi dippers cu sos samurai 230 Gr-290 kal.' }, price: 26, ing: { hu: 'Burgonya*, <span style="color:red;">mustár, tojás</span>, olaj, chilly', ro: 'Cartofi*, <span style="color:red;">muștar, ou</span>, ulei, chilly' } }
+    ],
+    'meleg_szosz': [
+        { name: { hu: 'Sajtszósz 100 Gr-230 kal.', ro: 'Sos de brânză 100 Gr-230 kal.' }, price: 15, ing: { hu: '<span style="color:red;">Sajt, tejszín, vaj, liszt</span>', ro: '<span style="color:red;">Brânză, smântână dulce, unt, făină</span>' } },
+        { name: { hu: 'Gombaszósz 100 Gr-180 kal.', ro: 'Sos de ciuperci 100 Gr-180 kal.' }, price: 15, ing: { hu: 'Gomba, <span style="color:red;">tejszín, vaj, liszt</span>', ro: 'Ciuperci, <span style="color:red;">smântână dulce, unt, făină</span>' } },
+        { name: { hu: 'Zöldborsmártás 100 Gr-150 kal.', ro: 'Sos de piper verde 100 Gr-150 kal.' }, price: 15, ing: { hu: 'Zöldbors, <span style="color:red;">tejszín, vaj, liszt</span>', ro: 'Piper verde, <span style="color:red;">smântână dulce, unt, făină</span>' } },
+        { name: { hu: 'Gorgonzola mártás 100 Gr-280 kal.', ro: 'Sos gorgonzola 100 Gr-280 kal.' }, price: 15, ing: { hu: '<span style="color:red;">Gorgonzola, tejszín, vaj, liszt</span>', ro: '<span style="color:red;">Gorgonzola, smântână dulce, unt, făină</span>' } }
+    ],
+    'tesztak': [
+        { name: { hu: 'Carbonara spagetti 400 Gr-820 kal.', ro: 'Spaghette carbonara 400 Gr-820 kal.' }, price: 34, ing: { hu: '<span style="color:red;">Spagetti tészta (liszt), tejszín</span>, bacon, <span style="color:red;">tojás, parmezán</span>', ro: '<span style="color:red;">Spaghette (făină), smântână dulce</span>, bacon, <span style="color:red;">ou, parmezan</span>' } },
+        { name: { hu: 'Penne arabiata 400 Gr-650 kal.', ro: 'Penne arabiata 400 Gr-650 kal.' }, price: 30, ing: { hu: '<span style="color:red;">Penne tészta (liszt)</span>, paradicsom szósz, fokhagyma, csípős paprika', ro: '<span style="color:red;">Penne (făină)</span>, sos tomate, usturoi, ardei iute' } },
+        { name: { hu: 'Tagliatele funghi porcini 400 Gr-710 kal.', ro: 'Tagliatele funghi porcini 400 Gr-710 kal.' }, price: 39, ing: { hu: '<span style="color:red;">Tagliatele tészta (liszt)</span>, vargánya*, fokhagyma, <span style="color:red;">vaj, tejszín, parmezán</span>', ro: '<span style="color:red;">Tagliatele (făină)</span>, hribi*, usturoi, <span style="color:red;">unt, smântână dulce, parmezan</span>' } },
+        { name: { hu: 'Csőben sült penne 400 Gr-950 kal.', ro: 'Penne gratinate 400 Gr-950 kal.' }, price: 37, ing: { hu: '<span style="color:red;">Penne (liszt)</span>, sonka, gomba, <span style="color:red;">mozzarella, tejszín</span>', ro: '<span style="color:red;">Penne (făină)</span>, șuncă, ciuperci, <span style="color:red;">mozzarella, smântână dulce</span>' } },
+        { name: { hu: 'Csőben sült bolognese penne 400 Gr-980 kal.', ro: 'Penne gratinate bolognese 400 Gr-980 kal.' }, price: 39, ing: { hu: '<span style="color:red;">Penne (liszt)</span>, marhahús*, paradicsom szósz, <span style="color:red;">mozzarella</span>', ro: '<span style="color:red;">Penne (făină)</span>, carne vită*, sos tomate, <span style="color:red;">mozzarella</span>' } },
+        { name: { hu: 'Garnélarákos, cukkinis tagliatelle 420 Gr-680 kal.', ro: 'Tagliatelle cu creveți și dovlecei 420 Gr-680 kal.' }, price: 46, ing: { hu: '<span style="color:red;">Tagliatelle (liszt), garnélarák*</span>, cukkini, fokhagyma, <span style="color:red;">vaj</span>, fehérbor', ro: '<span style="color:red;">Tagliatelle (făină), creveți*</span>, dovlecei, usturoi, <span style="color:red;">unt</span>, vin alb' } },
+        { name: { hu: 'Garnélarákos tagliatelle paradicsom szószban 420 Gr-640 kal.', ro: 'Tagliatelle cu creveți și sos de roșii 420 Gr-640 kal.' }, price: 46, ing: { hu: '<span style="color:red;">Tagliatelle (liszt), garnélarák*</span>, paradicsom szósz, fokhagyma', ro: '<span style="color:red;">Tagliatelle (făină), creveți*</span>, sos tomate, usturoi' } },
+        { name: { hu: 'Milánói penne 400 Gr-750 kal.', ro: 'Penne milanese 400 Gr-750 kal.' }, price: 33, ing: { hu: '<span style="color:red;">Penne (liszt)</span>, sonka, gomba, paradicsom szósz, <span style="color:red;">mozzarella</span>', ro: '<span style="color:red;">Penne (făină)</span>, șuncă, ciuperci, sos tomate, <span style="color:red;">mozzarella</span>' } },
+        { name: { hu: 'Quatro formaggi penne 400 Gr-920 kal.', ro: 'Penne Quatro formaggi 400 Gr-920 kal.' }, price: 37, ing: { hu: '<span style="color:red;">Penne (liszt), mozzarella, gorgonzola, parmezán, cedár, tejszín</span>', ro: '<span style="color:red;">Penne (făină), mozzarella, gorgonzola, parmezan, cedar, smântână dulce</span>' } },
+        { name: { hu: 'Carbonara penne 400 Gr-820 kal.', ro: 'Penne carbonara 400 Gr-820 kal.' }, price: 34, ing: { hu: '<span style="color:red;">Penne (liszt), tejszín</span>, bacon, <span style="color:red;">tojás, parmezán</span>', ro: '<span style="color:red;">Penne (făină), smântână dulce</span>, bacon, <span style="color:red;">ou, parmezan</span>' } },
+        { name: { hu: 'Gnocchi carbonara al forno 400 Gr-890 kal.', ro: 'Gnocchi carbonara al forno 400 Gr-890 kal.' }, price: 37, ing: { hu: '<span style="color:red;">Gnocchi (liszt), tejszín</span>, bacon, <span style="color:red;">mozzarella, tojás</span>', ro: '<span style="color:red;">Gnocchi (făină), smântână dulce</span>, bacon, <span style="color:red;">mozzarella, ou</span>' } },
+        { name: { hu: 'Gnocchi quattro formaggi 400 Gr-940 kal.', ro: 'Gnocchi quattro formaggi 400 Gr-940 kal.' }, price: 38, ing: { hu: '<span style="color:red;">Gnocchi (liszt), mozzarella, gorgonzola, parmezán, cedár, tejszín</span>', ro: '<span style="color:red;">Gnocchi (făină), mozzarella, gorgonzola, parmezan, cedar, smântână dulce</span>' } },
+        { name: { hu: 'Túrós, tepertős puliszka 230 Gr-650 kal.', ro: 'Mămăligă cu brânză és jumări 230 Gr-650 kal.' }, price: 31, ing: { hu: 'Kukoricadara, <span style="color:red;">tehéntúró, tejföl</span>, tepertő', ro: 'Mălai, <span style="color:red;">brânză de vacă, smântână</span>, jumări' } },
+        { name: { hu: 'Erdélyi puliszka 250 Gr-720 kal.', ro: 'Mămăligă ardeleneasca 250 Gr-720 kal.' }, price: 34, ing: { hu: 'Kukoricadara, <span style="color:red;">tehéntúró, tejföl, sajt</span>, szalonna, <span style="color:red;">tojás</span>', ro: 'Mălai, <span style="color:red;">brânză de vacă, smântână, cașcaval</span>, slănină, <span style="color:red;">ou</span>' } },
+        { name: { hu: 'Puliszka 200 Gr-250 kal.', ro: 'Mămăligă 200 Gr-250 kal.' }, price: 8, ing: { hu: 'Kukoricadara, só', ro: 'Mălai, sare' } }
+    ],
+    'koretek': [
+        { name: { hu: 'Sült burgonya 200 Gr', ro: 'Cartofi prăjiți 200 Gr' }, price: 12, ing: { hu: 'Burgonya*, olaj', ro: 'Cartofi*, ulei' } },
+        { name: { hu: 'Burgonyapüré 200 Gr', ro: 'Piure de cartofi 200 Gr' }, price: 12, ing: { hu: 'Burgonya, <span style="color:red;">vaj, tej</span>', ro: 'Cartofi, <span style="color:red;">unt, lapte</span>' } },
+        { name: { hu: 'Steak burgonya 200 Gr', ro: 'Cartofi steak 200 Gr' }, price: 14, ing: { hu: 'Burgonya*, fűszerek', ro: 'Cartofi*, condimente' } },
+        { name: { hu: 'Édesburgonya 200 Gr', ro: 'Cartofi dulci 200 Gr' }, price: 18, ing: { hu: 'Édesburgonya*, olaj', ro: 'Cartofi dulci*, ulei' } },
+        { name: { hu: 'Wedges burgonya 200 Gr', ro: 'Cartofi wedges 200 Gr' }, price: 14, ing: { hu: 'Burgonya*, fűszerek', ro: 'Cartofi*, condimente' } },
+        { name: { hu: 'Dippers burgonya 200 Gr', ro: 'Cartofi dippers 200 Gr' }, price: 15, ing: { hu: 'Burgonya*', ro: 'Cartofi*' } },
+        { name: { hu: 'Rizs 200 Gr', ro: 'Orez 200 Gr' }, price: 12, ing: { hu: 'Rizs, fűszerek', ro: 'Orez, condimente' } },
+        { name: { hu: 'Zöldséges rizs 200 Gr', ro: 'Orez cu legume 200 Gr' }, price: 14, ing: { hu: 'Rizs, vegyes zöldség', ro: 'Orez, legume asortate' } },
+        { name: { hu: 'Grillezett zöldségek 200 Gr', ro: 'Legume la grătar 200 Gr' }, price: 18, ing: { hu: 'Paprika, gomba, cukkini, padlizsán, paradicsom', ro: 'Ardei, ciuperci, dovlecel, vânătă, roșii' } }
+    ],
+    'savanyusag': [
+        { name: { hu: 'Káposzta saláta 150 Gr-129 kal.', ro: 'Salată de varză 150 Gr-129 kal.' }, price: 11, ing: { hu: 'Káposzta, ecet, olaj', ro: 'Varză, oțet, ulei' } },
+        { name: { hu: 'Paradicsom saláta 150 Gr-75 kal.', ro: 'Salată de roșii 150 Gr-75 kal.' }, price: 11, ing: { hu: 'Paradicsom, olaj, só', ro: 'Roșii, ulei, sare' } },
+        { name: { hu: 'Paradicsom saláta telemea-val 150 Gr-130 kal.', ro: 'Salată de roșii cu telemea 150 Gr-130 kal.' }, price: 11, ing: { hu: 'Paradicsom, <span style="color:red;">telemea sajt (tej)</span>', ro: 'Roșii, <span style="color:red;">telemea (lapte)</span>' } },
+        { name: { hu: 'Lilahagyma saláta 150 Gr-72 kal.', ro: 'Salată de ceapă roșie 150 Gr-72 kal.' }, price: 11, ing: { hu: 'Lilahagyma, ecet, olaj', ro: 'Ceapă roșie, oțet, ulei' } },
+        { name: { hu: 'Friss uborka saláta 150 Gr-44 kal.', ro: 'Salată de castraveți proaspeți 150 Gr-44 kal.' }, price: 10, ing: { hu: 'Uborka, só, ecet/citrom', ro: 'Castraveți, sare, oțet/lămâie' } },
+        { name: { hu: 'Friss vegyes saláta 150 Gr-75 kal.', ro: 'Salată asortată proaspătă 150 Gr-75 kal.' }, price: 12, ing: { hu: 'Paradicsom, uborka, paprika, hagyma', ro: 'Roșii, castraveți, ardei, ceapă' } },
+        { name: { hu: 'Vegyes savanyúság 150 Gr-46 kal.', ro: 'Salată de murături asortată 150 Gr-46 kal.' }, price: 12, ing: { hu: 'Uborka, gogosári, ecet', ro: 'Castraveți, gogosari, oțet' } },
+        { name: { hu: 'Cékla saláta 150 Gr-42 kal.', ro: 'Salată de sfeclă roșie 150 Gr-42 kal.' }, price: 12, ing: { hu: 'Cékla, ecet, torma', ro: 'Sfeclă roșie, oțet, hrean' } }
+    ],
+    'pizza': [
+        { name: { hu: 'Salami 500 Gr-1700 kal.', ro: 'Pizza Salami 500 Gr-1700 kal.' }, price: 27, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, oregano, szalámi', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, salam' } },
+        { name: { hu: 'Margherita 500 Gr-1662 kal.', ro: 'Margherita 500 Gr-1662 kal.' }, price: 24, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano' } },
+        { name: { hu: 'Funghi 550 Gr-1800 kal.', ro: 'Funghi 550 Gr-1800 kal.' }, price: 25, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, oregano, gomba szeletek', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, felii de ciuperci' } },
+        { name: { hu: 'Prosciutto 550 Gr-1650 kal.', ro: 'Prosciutto 550 Gr-1650 kal.' }, price: 26, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, oregano, sonka', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, suncă' } },
+        { name: { hu: 'Capricciosa 600 Gr-1690 kal.', ro: 'Capricciosa 600 Gr-1690 kal.' }, price: 29, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, sonka, gomba szeletek, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, suncă, ciuperci, oregano' } },
+        { name: { hu: 'Diavolo 600 Gr-1700 kal.', ro: 'Diavolo 600 Gr-1700 kal.' }, price: 28, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, szalámi, pepperoni, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, salam, pepperoni' } },
+        { name: { hu: 'Peperoncino 300 Gr-1650 kal.', ro: 'Peperoncino 300 Gr-1650 kal.' }, price: 28, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, sonka, pepperoni, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, șuncă, pepperoni' } },
+        { name: { hu: 'Dallas 600 Gr-1650 kal.', ro: 'Dallas 600 Gr-1650 kal.' }, price: 28.5, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, sonka, kukorica, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, șuncă, porumb' } },
+        { name: { hu: 'California 650 Gr-1700 kal.', ro: 'California 650 Gr-1700 kal.' }, price: 33, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, sonka, kukorica, gomba, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, șuncă, porumb, ciuperci' } },
+        { name: { hu: 'Ungarese 600 Gr-1890 kal.', ro: 'Ungarese 600 Gr-1890 kal.' }, price: 31, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, oregano, kolbász, füstölt bacon, pepperoni, hagyma', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, cârnați, bacon afumat, pepperoni, ceapă' } },
+        { name: { hu: 'Tonno 600 Gr-1800 kal.', ro: 'Tonno 600 Gr-1800 kal.' }, price: 32, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella, tonhal</span> darabkák, paradicsom szósz, oregano, hagyma, oliva bogyó', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, bucățele de <span style="color:red;">ton</span>, ceapă, măsline' } },
+        { name: { hu: 'Milano 600 Gr-1900 kal.', ro: 'Milano 600 Gr-1900 kal.' }, price: 34, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, oregano, sonka, kolbász, gomba, paprika, oliva bogyó', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, șuncă, cârnați, ciuperci, ardei gras, măsline' } },
+        { name: { hu: 'Cheddar 600 Gr-1900 kal.', ro: 'Cheddar 600 Gr-1900 kal.' }, price: 35, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, bacon, szalámi, hagyma, <span style="color:red;">cheddar</span>, kukorica, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, bacon, salam, ceapă, <span style="color:red;">cheddar</span>, porumb, oregano' } },
+        { name: { hu: 'Quattro stagioni 650 gr-1900 kal.', ro: 'Quattro stagioni 650 gr-1900 kal.' }, price: 35, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, sonka, füstölt bacon, gomba, kukorica', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, șuncă, bacon afumat, ciuperci, porumb' } },
+        { name: { hu: 'Quattro carni 650 Gr-1900 kal.', ro: 'Quattro carni 650 Gr-1900 kal.' }, price: 38, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, sonka, füstölt bacon, szalámi, csirkemell*', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, piept de pui*, bacon afumat, șuncă, salam' } },
+        { name: { hu: 'Quattro formaggi 600 Gr-1723 kal.', ro: 'Quattro formaggi 600 Gr-1723 kal.' }, price: 37, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella, füstölt sajt, gorgonzola, parmezán</span>', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, <span style="color:red;">cașcaval afumat, gorgonzola, parmezan</span>' } },
+        { name: { hu: 'Pollo 600 Gr-1900 kal.', ro: 'Pollo 600 Gr-1900 kal.' }, price: 36, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, csirke mell*, bacon, sült burgonya*', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, piept de pui*, bacon, cartofi prăjiți*' } },
+        { name: { hu: 'Palermo 600 Gr-1710 kal.', ro: 'Palermo 600 Gr-1710 kal.' }, price: 32, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, csirke mell*, sonka, kukorica', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, piept de pui*, șuncă, porumb' } },
+        { name: { hu: 'Marinata 600 Gr-1900 kal.', ro: 'Marinata 600 Gr-1900 kal.' }, price: 36, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, csirke mell*, <span style="color:red;">feta sajt</span>, paprika, hagyma, <span style="color:red;">joghurt</span>', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, piept de pui*, <span style="color:red;">brânză feta</span>, ardei gras, ceapă, <span style="color:red;">iaurt</span>' } },
+        { name: { hu: 'Hawai 600 Gr-1730 kal.', ro: 'Hawai 600 Gr-1730 kal.' }, price: 30.5, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, sonka, kukorica, ananász', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, ananas, șuncă, porumb' } },
+        { name: { hu: 'Florenza 600 Gr-1550 kal.', ro: 'Florenza 600 Gr-1550 kal.' }, price: 35, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, sonka, bacon, szalámi, kukorica', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, șuncă, bacon, salam, porumb' } },
+        { name: { hu: 'Vegetarian 600 Gr-1550 kal.', ro: 'Vegetarian 600 Gr-1550 kal.' }, price: 31, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, gomba, kukorica, bab, cukkini, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, ciuperci, porumb, fasole, dovlecel, oregano' } },
+        { name: { hu: 'Americana 650 Gr-1669 kal.', ro: 'Americana 650 Gr-1669 kal.' }, price: 33, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, csirke mell*, hasábburgonya*, <span style="color:red;">füstölt sajt</span>', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, piept de pui*, cartofi pai*, <span style="color:red;">cașcaval afumat</span>' } },
+        { name: { hu: 'Mexicana 600 Gr-1710 kal.', ro: 'Mexicana 600 Gr-1710 kal.' }, price: 31, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, kolbász, bab, pepperoni', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, cârnați, fasole, pepperoni' } },
+        { name: { hu: 'Carbonara 600 Gr-1700 kal.', ro: 'Carbonara 600 Gr-1700 kal.' }, price: 31, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, sonka, bacon, <span style="color:red;">tükörtojás, tejföl</span>', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, șuncă, bacon, <span style="color:red;">ochi de ou, smântână</span>' } },
+        { name: { hu: 'Giovanni 600 Gr-1710 kal.', ro: 'Giovanni 600 Gr-1710 kal.' }, price: 33, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, paradicsom szósz, oregano, <span style="color:red;">mozzarella</span>, sonka, csirkemell*, gomba, paprika', ro: '<span style="color:red;">Blat (făină)</span>, sos tomate, <span style="color:red;">mozzarella</span>, oregano, șuncă, piept de pui*, ciuperci, ardei gras' } },
+        { name: { hu: 'Messina 600 Gr-1900 kal.', ro: 'Messina 600 Gr-1900 kal.' }, price: 33, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, sonka, bacon, <span style="color:red;">főtt tojás</span>, paprika, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, șuncă, bacon, <span style="color:red;">ou fiert</span>, ardei gras, oregano' } },
+        { name: { hu: 'Sevilla 650 Gr-1850 kal.', ro: 'Sevilla 650 Gr-1850 kal.' }, price: 42, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, bacon, szalámi, <span style="color:red;">gorgonzola, füstölt sajt</span>, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, bacon, salam, <span style="color:red;">gorgonzola, caș afumat</span>, oregano' } },
+        { name: { hu: 'Mozzarellea 600 Gr-1700 kal.', ro: 'Mozzarellea 600 Gr-1700 kal.' }, price: 34, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, oregano, bazsalikom, cherry paradicsom, <span style="color:red;">mozzarella golyócskák</span>', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, oregano, busuioc, roșii cherry, <span style="color:red;">biluțe de mozzarella</span>' } },
+        { name: { hu: 'Calzone 600 Gr-1850 kal.', ro: 'Calzone 600 Gr-1850 kal.' }, price: 34, ing: { hu: '<span style="color:red;">Pizzalap (liszt), mozzarella</span>, paradicsom szósz, sonka, kolbász, <span style="color:red;">burduf túró</span>, oregano', ro: '<span style="color:red;">Blat (făină), mozzarella</span>, sos tomate, șuncă, cârnați afumat, <span style="color:red;">burduf</span>, oregano' } },
+        { name: { hu: 'Focaccia 400 Gr-1550 kal.', ro: 'Focaccia 400 Gr-1550 kal.' }, price: 22, ing: { hu: '<span style="color:red;">Pizzalap (liszt)</span>, fokhagyma, fűszerek, oliva olaj', ro: '<span style="color:red;">Blat (făină)</span>, usturoi, condimente, ulei de măsline' } }
+    ],
+    'szoszok': [
+        { name: { hu: 'Fehér szósz-211 kal.', ro: 'Sos alb-211 kal.' }, price: 4.5, ing: { hu: '<span style="color:red;">Joghurt, mustár, tojás</span>, fokhagyma', ro: '<span style="color:red;">Iaurt, muștar, ou</span>, usturoi' } },
+        { name: { hu: 'Pikáns fehér szósz-211 kal.', ro: 'Sos alb picant-211 kal.' }, price: 5, ing: { hu: '<span style="color:red;">Joghurt, mustár, tojás</span>, fokhagyma, chilly', ro: '<span style="color:red;">Iaurt, muștar, ou</span>, usturoi, chilly' } },
+        { name: { hu: 'Piros szósz-24 kal.', ro: 'Sos roșu-24 kal.' }, price: 4.5 },
+        { name: { hu: 'Pikáns piros szósz-24 kal.', ro: 'Sos roșu picant-24 kal.' }, price: 5 }
+    ],
+     'csomagolas': [
+        { 
+            name: { hu: 'Csomagolás', ro: 'Ambalaj' }, 
+            price: 4.5, 
+            ing: { hu: '', ro: '' } 
         }
+    ],
+    'kave_tea': [
+        { name: { hu: 'Ice coffe-200 ml', ro: 'Ice coffe-200 ml' }, price: 15, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Espresso-30 ml', ro: 'Espresso-30 ml' }, price: 10, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Capuccino espresso-100 ml', ro: 'Capuccino espresso-100 ml' }, price: 11, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Latte machiato-200 ml', ro: 'Latte machiato-200 ml' }, price: 15, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Sötét / fehér forró csoki-150 ml', ro: 'Ciocolată caldă neagră / albă-150 ml' }, price: 14, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Gyógynövény / gyümölcs tea-250 ml', ro: 'Ceai plante / fructe-250 ml' }, price: 10, ing: { hu: '', ro: '' } }
+    ],
+    'udito': [
+        { name: { hu: 'Coca Cola ( Cola / Fanta )-250 ml', ro: 'Coca Cola ( Cola / Fanta )-250 ml' }, price: 9.5, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Schweppes-250 ml', ro: 'Schweppes-250 ml' }, price: 9.5, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Cappy (Vérnarancs, narancs, meggy, körte, barack)-250 ml', ro: 'Cappy (Portocale, portocale roșii, vișine, pere, piersici)-250 ml' }, price: 10, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Fuze tea 250 ml', ro: 'Fuze tea 250 ml' }, price: 10, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Dorna ásványvíz / szénsavmentes-330 ml', ro: 'Apă Dorna minerală / plată-330 ml' }, price: 7, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Ásványvíz / szénsavmentes -750 ml', ro: 'Apă minerală / plată-750 ml' }, price: 14, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Klasszikus limonádé-400 / 1000 ml', ro: 'Limonadă clasică-400 / 1000 ml' }, price: 13, ing: { hu: '1000 ml = 23 lei', ro: '1000 ml = 23 lei' } },
+        { name: { hu: 'Vegyes limonádé-400 / 1000 ml', ro: 'Limonadă mixtă-400 / 1000 ml' }, price: 13, ing: { hu: '1000 ml = 23 lei', ro: '1000 ml = 23 lei' } },
+        { name: { hu: 'Aromás limonádé-400 / 1000 ml', ro: 'Limonadă cu aromă-400 / 1000 ml' }, price: 14, ing: { hu: '1000 ml = 24 lei', ro: '1000 ml = 24 lei' } },
+        { name: { hu: 'Fresh (portocale, mixt, grapefruit)-250 ml', ro: 'Fresh (portocale, mixt, grapefruit)-250 ml' }, price: 16, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Burn-250 ml', ro: 'Burn-250 ml' }, price: 12, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Red Bull-250 ml', ro: 'Red Bull-250 ml' }, price: 14, ing: { hu: '', ro: '' } }
+    ],
+    'sorok': [
+        { name: { hu: 'Ursus-500 ml', ro: 'Ursus-500 ml' }, price: 10, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Ursus-330 ml', ro: 'Ursus-330 ml' }, price: 8.5, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Ursus Black-330 ml', ro: 'Ursus Black-330 ml' }, price: 9, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Ursus Retro-500 ml', ro: 'Ursus Retro-500 ml' }, price: 9, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Alkohol mentes Ursus-500 ml', ro: 'Ursus fără alcool-500 ml' }, price: 8, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Peroni-500 ml', ro: 'Peroni-500 ml' }, price: 11, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Peroni cu alcool / fără alcool-330 ml', ro: 'Peroni cu alcool / fără alcool-330 ml' }, price: 10, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Peroni Stile Capri-330 ml', ro: 'Peroni Stile Capri-330 ml' }, price: 8.5, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Timișoreana-500 ml', ro: 'Timișoreana-500 ml' }, price: 9, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Kozel lager-330 ml', ro: 'Kozel lager-330 ml' }, price: 8.5, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Kozel dark-330 ml', ro: 'Kozel dark-330 ml' }, price: 8.5, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Corona-355 ml', ro: 'Corona-355 ml' }, price: 14, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Pilsner Urquell-330 ml', ro: 'Pilsner Urquell-330 ml' }, price: 10, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Azuga nefiltrată-500 ml', ro: 'Azuga nefiltrată-500 ml' }, price: 13, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Ursus korsó sör-400 ml', ro: 'Bere Ursus halbă-400 ml' }, price: 10, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Ursus kis korsó sör-300 ml', ro: 'Bere Ursus țap-300 ml' }, price: 8, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Peroni korsó sör-400 ml', ro: 'Peroni halbă-400 ml' }, price: 12, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Peroni kis korsó sör-300 ml', ro: 'Peroni țap-300 ml' }, price: 9.5, ing: { hu: '', ro: '' } }
+    ],
+    'borok': [
+        { name: { hu: 'Sauvignon Blanc demisec-750 ml', ro: 'Sauvignon Blanc demisec-750 ml' }, price: 50, ing: { hu: 'Alb / Fehér', ro: 'Alb' } },
+        { name: { hu: 'Traminer demidulce-750 ml', ro: 'Traminer demidulce-750 ml' }, price: 50, ing: { hu: 'Alb / Fehér', ro: 'Alb' } },
+        { name: { hu: 'Riesling Italian sec-750 ml', ro: 'Riesling Italian sec-750 ml' }, price: 45, ing: { hu: 'Alb / Fehér', ro: 'Alb' } },
+        { name: { hu: 'Rose demidulce-750 ml', ro: 'Rose demidulce-750 ml' }, price: 45, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Cabernet Sauvignon sec-750 ml', ro: 'Cabernet Sauvignon sec-750 ml' }, price: 60, ing: { hu: 'Roșu / Vörös', ro: 'Roșu' } },
+        { name: { hu: 'Merlot demisec-750 ml', ro: 'Merlot demisec-750 ml' }, price: 43, ing: { hu: 'Roșu / Vörös', ro: 'Roșu' } },
+        { name: { hu: 'Kancsós Vörös / Fehér bor-500 ml', ro: 'Vinul Casei Roșu / Alb-500 ml' }, price: 17, ing: { hu: '', ro: '' } },
+{ name: { hu: 'Bor pohárban-200 ml', ro: 'Vin la pahar-200 ml' }, price: 14, ing: { hu: '', ro: '' } }
+    ],
+    'rovid_italok': [
+        { name: { hu: 'Jim Beam-50 ml', ro: 'Jim Beam-50 ml' }, price: 13, ing: { hu: 'Whiskey', ro: 'Whiskey' } },
+        { name: { hu: 'Jack Daniels-50 ml', ro: 'Jack Daniels-50 ml' }, price: 14, ing: { hu: 'Whiskey', ro: 'Whiskey' } },
+        { name: { hu: 'Házi szilvapálinka-50 ml', ro: 'Pălincă de casă de prune-50 ml' }, price: 12, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Stalinskaya-50 ml', ro: 'Stalinskaya-50 ml' }, price: 12, ing: { hu: 'Vodka', ro: 'Vodka' } },
+        { name: { hu: 'Finlandia-50 ml', ro: 'Finlandia-50 ml' }, price: 12, ing: { hu: 'Vodka', ro: 'Vodka' } },
+        { name: { hu: 'Absolut-50 ml', ro: 'Absolut-50 ml' }, price: 12, ing: { hu: 'Vodka', ro: 'Vodka' } },
+        { name: { hu: 'Absolut lemon-50 ml', ro: 'Absolut lemon-50 ml' }, price: 12, ing: { hu: 'Vodka', ro: 'Vodka' } },
+        { name: { hu: 'Tequila-50 ml', ro: 'Tequila-50 ml' }, price: 12, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Martini (Bianco, Rosso)-50 ml', ro: 'Martini (Bianco, Rosso)-50 ml' }, price: 12, ing: { hu: '', ro: '' } },
+        { name: { hu: 'Baileys-50 ml', ro: 'Baileys-50 ml' }, price: 12, ing: { hu: 'Likőr', ro: 'Liqueur' } },
+        { name: { hu: 'Jidvei-50 ml', ro: 'Jidvei-50 ml' }, price: 12, ing: { hu: 'Cognac', ro: 'Cognac' } },
+        { name: { hu: 'Alexandrion-50 ml', ro: 'Alexandrion-50 ml' }, price: 12, ing: { hu: 'Cognac', ro: 'Cognac' } },
+        { name: { hu: 'Gin Tonic-250 ml', ro: 'Gin Tonic-250 ml' }, price: 25, ing: { hu: '', ro: '' } }
+    ],
+    'desszert': [
+        { name: { hu: 'Csoki szuflé vanília fagyival 250Gr-830 kal.', ro: 'Sufleu de ciocolată cu înghețată 250Gr-830 kal.' }, price: 31, ing: { hu: '<span style="color:red;">Liszt, tejpor, tojás</span>', ro: '<span style="color:red;">Făină, lapte praf, ou</span>' } },
+        { name: { hu: 'Finettis banános palacsinta 180 Gr-325 kal.', ro: 'Clătite cu finetti și banane 180 Gr-325 kal.' }, price: 28, ing: { hu: '<span style="color:red;">Liszt, tej, tojás</span>', ro: '<span style="color:red;">Făină, lapte, ou</span>' } },
+        { name: { hu: 'Túrós palacsinta vanília szósszal 200 Gr-735 kal.', ro: 'Clătite cu brânză și sos de vanilie 200 Gr-735 kal.' }, price: 34, ing: { hu: '<span style="color:red;">Liszt, tej, tojás</span>', ro: '<span style="color:red;">Făină, lapte, ou</span>' } },
+        { name: { hu: 'Áfonya lekváros palacsinta 160 Gr-700 kal.', ro: 'Clătite cu dulceață de afine 160 Gr-700 kal.' }, price: 25, ing: { hu: '<span style="color:red;">Liszt, tej, tojás</span>', ro: '<span style="color:red;">Făină, lapte, ou</span>' } },
+        { name: { hu: 'Tejfölös túrógombóc áfonya lekvárral 200 Gr-380 kal.', ro: 'Papanași cu smântână și dulceață 200 Gr-380 kal.' }, price: 45, ing: { hu: '<span style="color:red;">Liszt, tehéntúró, tojás, tejföl</span>', ro: '<span style="color:red;">Făină, brânză de vaci, ou, smântână</span>' } },
+        { name: { hu: 'Vegyes fagyi 180 Gr-700 kal.', ro: 'Înghețată asortată 180 Gr-700 kal.' }, price: 25, ing: { hu: '<span style="color:red;">Tejszín</span>', ro: '<span style="color:red;">Frișcă</span>' } },
+       { name: { hu: 'Pisztáciás szeletelt vékony palacsinta 250Gr-380 kal.', ro: 'Tagliatelle cu fistic 250Gr-380 kal.' }, price: 32, ing: { hu: '<span style="color:red;">Liszt, tojás, tej</span>', ro: '<span style="color:red;">Făină, ou, lapte</span>' } }
+    ]
+}; // EZ ZÁRJA LE AZ ADATBÁZIST - NAGYON FONTOS!
 
-        function init() {
-            const grid = document.getElementById('category-view');
-            grid.innerHTML = categories.map(cat => `
-                <div class="cat-card" onclick="showMenu('${cat.id}', '${cat[currentLang]}')">
-                    <div>${cat.icon}</div>
-                    <h3>${cat[currentLang]}</h3>
-                </div>
-            `).join('');
-            updateAdminStats();
+const categories = [
+    { id: 'reggeli', hu: 'Reggeli', ro: 'Mic dejun', icon: '🍳' },
+    { id: 'starterek', hu: 'Starterek', ro: 'Startere', icon: '🥗' },
+    { id: 'salatak', hu: 'Saláták', ro: 'Salate', icon: '🥬' },
+    { id: 'levesek', hu: 'Levesek / Csorbák', ro: 'Supe / Ciorbe', icon: '🍜' },
+    { id: 'harom_szemelyes_talak', hu: '3 személyes tálak', ro: 'Platouri 3 pers', icon: '🍱' },
+    { id: 'csirke', hu: 'Csirke ételek', ro: 'Preparate din pasăre', icon: '🍗' },
+    { id: 'sertes', hu: 'Sertés ételek', ro: 'Preparate din porc', icon: '🥩' },
+    { id: 'hal', hu: 'Halételek', ro: 'Preparate din pește', icon: '🐟' },
+    { id: 'marha', hu: 'Marha ételek', ro: 'Preparate din vită', icon: '🐂' },
+    { id: 'burger', hu: 'Burgerek & Mixek', ro: 'Burger & Mix', icon: '🍔' },
+    { id: 'meleg_szosz', hu: 'Meleg szószok', ro: 'Sosuri calde', icon: '🍯' },
+    { id: 'tesztak', hu: 'Tészták & Puliszkák', ro: 'Paste & Mămăligă', icon: '🍝' },
+    { id: 'koretek', hu: 'Garnitúrák / Köretek', ro: 'Garnituri', icon: '🍟' },
+    { id: 'savanyusag', hu: 'Saláták / Savanyúk', ro: 'Salată și murături', icon: '🥒' },
+    { id: 'pizza', hu: 'Pizza & Focaccia', ro: 'Pizza & Focaccia', icon: '🍕' },
+    { id: 'desszert', hu: 'Desszertek', ro: 'Deserturi', icon: '🍰' },
+    { id: 'udito', hu: 'Üdítők', ro: 'Băuturi răcoritoare', icon: '🥤' },
+    { id: 'borok', hu: 'Borok', ro: 'Vinuri', icon: '🍷' },
+    { id: 'sorok', hu: 'Sörök', ro: 'Berărie', icon: '🍺' },
+    { id: 'rovid_italok', hu: 'Rövid italok', ro: 'Băuturi spirtoase', icon: '🥃' }
+];
+
+function changeLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.getElementById('btn-' + lang);
+    if (activeBtn) activeBtn.classList.add('active');
+    
+    const elements = {
+        'back-btn-text': 'backBtn',
+        'contact-title-text': 'contactTitle',
+        'address-label': 'address',
+        'address-value': 'addressValue',
+        'call-text': 'callNow',
+        'opening-title-text': 'openingTitle',
+        'weekdays-text': 'weekdays',
+        'saturday-text': 'saturday',
+        'sunday-text': 'sunday'
+    };
+
+    for (let id in elements) {
+        const el = document.getElementById(id);
+        if (el && translations[lang][elements[id]]) {
+            el.innerText = translations[lang][elements[id]];
         }
+    }
+    
+    showCategories();
+}
 
-        function showMenu(id, name) {
-            document.getElementById('category-view').style.display = 'none';
-            document.getElementById('menu-view').style.display = 'block';
-            document.getElementById('category-title').innerText = name;
-            const container = document.getElementById('food-list-container');
-            container.innerHTML = (database[id] || []).map(item => `
-                <div class="food-item">
-                    <strong>${item.name[currentLang]}</strong>
-                    <span>${item.price} lei</span>
-                    <button class="add-btn" onclick="addToCart('${item.name.hu}', '${item.name.ro}', ${item.price})">${translations[currentLang].addToCart}</button>
-                </div>
-            `).join('');
-            window.scrollTo(0, 0);
+function showCategories() {
+    const container = document.getElementById('category-view');
+    const menuView = document.getElementById('menu-view');
+    
+    if (!container || !menuView) return;
+
+    container.innerHTML = '';
+    menuView.style.display = 'none';
+    container.style.display = 'grid';
+
+    categories.forEach(cat => {
+        if (database[cat.id]) {
+            const card = document.createElement('div');
+            card.className = 'cat-card';
+            card.onclick = () => showMenu(cat.id);
+            card.innerHTML = `<div style="font-size: 40px;">${cat.icon}</div><h3>${cat[currentLang]}</h3>`;
+            container.appendChild(card);
         }
+    });
+}
 
-        function showCategories() {
-            document.getElementById('category-view').style.display = 'grid';
-            document.getElementById('menu-view').style.display = 'none';
-            window.scrollTo(0, 0);
-        }
+function showMenu(catId) {
+    const container = document.getElementById('category-view');
+    const menuView = document.getElementById('menu-view');
+    const listContainer = document.getElementById('food-list-container');
+    
+    if (!container || !menuView || !listContainer) return;
 
-        function addToCart(hu, ro, price) {
-            cart.push({ hu, ro, price });
-            renderCart();
-        }
+    container.style.display = 'none';
+    menuView.style.display = 'block';
+    
+    const catData = categories.find(c => c.id === catId);
+    document.getElementById('category-title').innerText = catData ? catData[currentLang].toUpperCase() : catId.toUpperCase();
+    
+    listContainer.innerHTML = '';
 
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            renderCart();
-        }
+    database[catId].forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'food-item';
+        div.innerHTML = `
+            <strong>${item.name[currentLang]}</strong>
+            <span class="food-price">${item.price} RON</span>
+            <div class="ingredients">${item.ing[currentLang]}</div>
+        `;
+        listContainer.appendChild(div);
+    });
+    window.scrollTo(0, 0);
+}
 
-        function renderCart() {
-            const content = document.getElementById('cart-content');
-            const totalSpan = document.getElementById('total');
-            const mobileBar = document.getElementById('mobile-cart-bar');
-            
-            if(cart.length === 0) {
-                content.innerHTML = translations[currentLang].cartEmpty;
-                totalSpan.innerText = '0';
-                document.getElementById('mobile-total').innerText = '0';
-                mobileBar.style.display = 'none';
-                document.getElementById('summary-details').innerHTML = '';
-                document.getElementById('checkout-btn').disabled = true;
-                return;
-            }
-            
-            content.innerHTML = cart.map((item, i) => `
-                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span>${currentLang === 'hu' ? item.hu : item.ro}</span>
-                    <span>${item.price} lei <button class="remove-btn" onclick="removeFromCart(${i})">✕</button></span>
-                </div>
-            `).join('');
-            
-            const prodSum = cart.reduce((s, i) => s + i.price, 0);
-            const NO_PKG = ['Fehér szósz', 'Piros szósz', 'Csomagolás', 'Extra', 'Espresso', 'Tea'];
-            const pkgCount = cart.filter(item => !NO_PKG.some(no => item.hu.includes(no))).length;
-            const pkgSum = pkgCount * PACKAGING_FEE;
-            const total = prodSum + pkgSum;
-            
-            document.getElementById('summary-details').innerHTML = `
-                ${translations[currentLang].products}: ${prodSum.toFixed(1)} lei<br>
-                ${translations[currentLang].packaging}: ${pkgSum.toFixed(1)} lei
-            `;
-            
-            totalSpan.innerText = total.toFixed(1);
-            document.getElementById('mobile-total').innerText = total.toFixed(1);
-            
-            if(window.innerWidth <= 600) mobileBar.style.display = 'flex';
-
-            const warn = document.getElementById('min-order-warning');
-            if(total < MIN_ORDER_VALUE) {
-                const diff = (MIN_ORDER_VALUE - total).toFixed(1);
-                warn.innerText = translations[currentLang].minOrderMsg.replace('{diff}', diff);
-                warn.style.display = 'block';
-                document.getElementById('checkout-btn').disabled = true;
-            } else {
-                warn.style.display = 'none';
-                document.getElementById('checkout-btn').disabled = false;
-            }
-        }
-
-        function handleCheckoutClick() {
-            if(parseFloat(document.getElementById('total').innerText) >= MIN_ORDER_VALUE) {
-                document.getElementById('order-overlay').style.display = 'flex';
-            }
-        }
-
-        function validateForm() {
-            const n = document.getElementById('cust-name').value;
-            const a = document.getElementById('cust-addr').value;
-            const p = document.getElementById('cust-phone').value;
-            const t = document.getElementById('terms-accept').checked;
-            document.getElementById('star-name').style.display = n ? 'none' : 'inline';
-            document.getElementById('star-addr').style.display = a ? 'none' : 'inline';
-            document.getElementById('star-phone').style.display = p ? 'none' : 'inline';
-            document.getElementById('star-terms').style.display = t ? 'none' : 'inline';
-            document.getElementById('final-send-btn').disabled = !(n && a && p && t);
-        }
-
-        function sendWhatsApp() {
-            const prodSum = cart.reduce((s, i) => s + i.price, 0);
-            const NO_PKG = ['Fehér szósz', 'Piros szósz', 'Csomagolás', 'Extra', 'Espresso', 'Tea'];
-            const pkgCount = cart.filter(item => !NO_PKG.some(no => item.hu.includes(no))).length;
-            const pkgSum = pkgCount * PACKAGING_FEE;
-            const total = prodSum + pkgSum;
-
-            // SZÁMLÁLÓ MENTÉSE
-            let rev = parseFloat(localStorage.getItem('revenue') || 0);
-            let cnt = parseInt(localStorage.getItem('count') || 0);
-            localStorage.setItem('revenue', (rev + total).toFixed(1));
-            localStorage.setItem('count', cnt + 1);
-            updateAdminStats();
-
-            let msg = `*ÚJ RENDELÉS - MARINATA*\n\n`;
-            msg += `👤 *Név:* ${document.getElementById('cust-name').value}\n`;
-            msg += `📍 *Cím:* ${document.getElementById('cust-addr').value}\n`;
-            msg += `📞 *Tel:* ${document.getElementById('cust-phone').value}\n`;
-            msg += `💳 *Fizetés:* ${document.getElementById('card-payment').checked ? "Kártya" : "Készpénz"}\n`;
-            msg += `📞 *Visszahívás:* ${document.getElementById('call-request').checked ? "Igen" : "Nem"}\n`;
-            msg += `💬 *Megjegyzés:* ${document.getElementById('cust-note').value || "-"}\n\n`;
-            msg += `*Rendelés:*\n`;
-            msg += cart.map(item => `- ${currentLang === 'hu' ? item.hu : item.ro} (${item.price} lei)`).join('\n');
-            msg += `\n\n📦 Csomagolás: ${pkgSum.toFixed(1)} lei`;
-            msg += `\n💰 *Összesen: ${total.toFixed(1)} lei*`;
-
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-            document.getElementById('order-overlay').style.display = 'none';
-            cart = [];
-            renderCart();
-        }
-
-        init();
-        changeLang('hu');
-    </script>
+document.addEventListener('DOMContentLoaded', () => {
+    showCategories();
+});
+</script>
 </body>
 </html>
